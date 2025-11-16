@@ -29,6 +29,11 @@ function Navbar() {
               Berita
             </Link>
           </li>
+          <li className="navbar-item">
+            <Link to="/login" className="navbar-link">
+              Login
+            </Link>
+          </li>
         </ul>
       </div>
     </nav>
