@@ -44,7 +44,6 @@ function Dosen() {
         <>
           {dosen.status === "success" ? (
             <div className="dosen-list">
-              {/* Kita akan ubah ini menjadi tabel nanti agar lebih rapi */}
               {dosen.data.map((item) => (
                 <div
                   key={item.id_dosen}
@@ -56,7 +55,7 @@ function Dosen() {
                   }}
                 >
                   <img
-                    src={`http://simathunimed.test/backend/uploads/images/${item.foto_profil}`}
+                    src={`http://localhost/SiMathUNIMED/backend/uploads/images/${item.foto_profil}`}
                     alt={item.nama_dosen}
                     style={{
                       width: "50px",
@@ -66,14 +65,17 @@ function Dosen() {
                       objectFit: "cover",
                     }}
                   />
-                  <span style={{ fontWeight: "bold" }}>{item.nama_dosen}</span>
+
+                  <Link
+                    to={`/dosen/${item.id_dosen}`}
+                    style={{ fontWeight: "bold", fontSize: "1.1rem" }}
+                  >
+                    {item.nama_dosen}
+                  </Link>
                   <br />
                   <small style={{ color: "#555" }}>{item.nip}</small>
                   <br />
                   <small>{item.nama_prodi}</small>
-                  <br />
-                  {/* Nanti kita buat link ke detail dosen */}
-                  {/* <Link to={`/dosen/${item.id_dosen}`}>Lihat Profil</Link> */}
                 </div>
               ))}
             </div>
