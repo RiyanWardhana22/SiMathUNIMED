@@ -13,6 +13,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/admin/Dashboard";
 import AdminTambahBerita from "./pages/admin/AdminTambahBerita";
 import AdminKelolaBerita from "./pages/admin/AdminKelolaBerita";
+import AdminEditBerita from "./pages/admin/AdminEditBerita";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
               element={<AdminTambahBerita />}
             />
           </Route>
+          <Route path="/admin/berita/edit/:id" element={<AdminEditBerita />} />
         </Route>
       </Routes>
     </BrowserRouter>
