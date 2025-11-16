@@ -1,0 +1,89 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+
+const API_URL = "http://localhost/SiMathUNIMED/backend/";
+
+function Dosen() {
+  const [dosen, setDosen] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchDosen = async () => {
+      setError(null);
+      try {
+        const response = await axios.get(API_URL + "get_dosen.php");
+        setDosen(response.data);
+      } catch (err) {
+        console.error("Terjadi kesalahan:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDosen();
+  }, []);
+
+  return (
+    <div className="container">
+      <h2>Manajemen Dosen & Staff</h2>
+      <p>Daftar dosen pengajar di Jurusan Matematika UNIMED.</p>
+
+      {loading && <p>Mengambil data dosen...</p>}
+
+      {error && (
+        <div style={{ color: "red", border: "1px solid red", padding: "10px" }}>
+          <h4>Gagal Mengambil Data:</h4>
+          <p>{error}</p>
+        </div>
+      )}
+
+      {!loading && !error && dosen && (
+        <>
+          {dosen.status === "success" ? (
+            <div className="dosen-list">
+              {/* Kita akan ubah ini menjadi tabel nanti agar lebih rapi */}
+              {dosen.data.map((item) => (
+                <div
+                  key={item.id_dosen}
+                  style={{
+                    border: "1px solid #ccc",
+                    padding: "10px",
+                    margin: "10px 0",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <img
+                    src={`http://simathunimed.test/backend/uploads/images/${item.foto_profil}`}
+                    alt={item.nama_dosen}
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      borderRadius: "50%",
+                      marginRight: "15px",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <span style={{ fontWeight: "bold" }}>{item.nama_dosen}</span>
+                  <br />
+                  <small style={{ color: "#555" }}>{item.nip}</small>
+                  <br />
+                  <small>{item.nama_prodi}</small>
+                  <br />
+                  {/* Nanti kita buat link ke detail dosen */}
+                  {/* <Link to={`/dosen/${item.id_dosen}`}>Lihat Profil</Link> */}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>{dosen.message}</p>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+export default Dosen;

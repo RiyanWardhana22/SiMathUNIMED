@@ -19,7 +19,11 @@ function Navbar() {
               Profil Jurusan
             </Link>
           </li>
-          {/* Tambahkan link lain di sini nanti */}
+          <li className="navbar-item">
+            <Link to="/dosen" className="navbar-link">
+              Dosen
+            </Link>
+          </li>
         </ul>
       </div>
     </nav>
