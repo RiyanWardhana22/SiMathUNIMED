@@ -85,6 +85,33 @@ function Dashboard() {
             </Link>
           </li>
         </ul>
+
+        <div
+          style={{
+            margin: "20px 0",
+            borderTop: "1px solid #eee",
+            paddingTop: "20px",
+          }}
+        >
+          <h3>Manajemen Situs</h3>
+          <ul style={{ listStyle: "none", paddingLeft: "0" }}>
+            <li style={{ marginBottom: "10px" }}>
+              <Link
+                to="/admin/pengaturan"
+                style={{
+                  display: "inline-block",
+                  padding: "8px 12px",
+                  backgroundColor: "#6c757d",
+                  color: "white",
+                  textDecoration: "none",
+                  borderRadius: "5px",
+                }}
+              >
+                Pengaturan Website (Visi, Misi, dll)
+              </Link>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );

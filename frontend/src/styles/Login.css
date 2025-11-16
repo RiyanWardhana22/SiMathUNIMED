@@ -71,3 +71,26 @@
   margin-bottom: 20px;
   text-align: center;
 }
+
+.textarea-input,
+.file-input,
+.select-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+.file-input {
+  padding: 8px;
+}
+.success-message {
+  color: #006400;
+  background-color: #dff2bf;
+  border: 1px solid #006400;
+  padding: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  border-radius: 4px;
+}
