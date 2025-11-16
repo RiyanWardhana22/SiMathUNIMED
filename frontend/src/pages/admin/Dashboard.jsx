@@ -18,24 +18,40 @@ function Dashboard() {
           paddingTop: "20px",
         }}
       >
-        <h3>Manajemen Konten</h3>
+        <h3
+          style={{
+            margin: "20px 0",
+          }}
+        >
+          Manajemen Konten
+        </h3>
         <ul style={{ listStyle: "none", paddingLeft: "0" }}>
           <li style={{ marginBottom: "10px" }}>
             <Link
               to="/admin/berita/tambah"
+              className="btn-primary"
+              style={{ textDecoration: "none" }}
+            >
+              + Tambah Berita / Event Baru
+            </Link>
+          </li>
+
+          {/* 1. TAMBAHKAN LINK "KELOLA" BARU */}
+          <li style={{ marginBottom: "10px" }}>
+            <Link
+              to="/admin/berita"
               style={{
                 display: "inline-block",
-                padding: "10px 15px",
-                backgroundColor: "#004a8d",
+                padding: "8px 12px",
+                backgroundColor: "#5bc0de",
                 color: "white",
                 textDecoration: "none",
                 borderRadius: "5px",
               }}
             >
-              + Tambah Berita / Event Baru
+              Kelola Semua Postingan
             </Link>
           </li>
-          {/* Nanti kita tambahkan link "Edit Berita", "Kelola Dosen", dll di sini */}
         </ul>
       </div>
     </div>

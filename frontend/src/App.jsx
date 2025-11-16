@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/admin/Dashboard";
 import AdminTambahBerita from "./pages/admin/AdminTambahBerita";
+import AdminKelolaBerita from "./pages/admin/AdminKelolaBerita";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route element={<Layout />}>
           <Route element={<ProtectedRoute />}>
             <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path="/admin/berita" element={<AdminKelolaBerita />} />
             <Route
               path="/admin/berita/tambah"
               element={<AdminTambahBerita />}

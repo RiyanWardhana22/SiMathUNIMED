@@ -1,0 +1,88 @@
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.admin-table th {
+  background-color: #f7f7f7;
+  font-weight: 600;
+  color: #333;
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.admin-table .btn-edit,
+.admin-table .btn-hapus,
+.btn-primary {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.btn-primary {
+  background-color: #004a8d;
+  color: white;
+  padding: 8px 12px;
+}
+.btn-primary:hover {
+  background-color: #003366;
+}
+
+.admin-table .btn-edit {
+  background-color: #5bc0de;
+  color: white;
+}
+.admin-table .btn-edit:hover {
+  background-color: #31b0d5;
+}
+
+.admin-table .btn-hapus {
+  background-color: #d9534f;
+  color: white;
+}
+.admin-table .btn-hapus:hover {
+  background-color: #c9302c;
+}
+
+.kategori-badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: white;
+}
+.kategori-badge.berita {
+  background-color: #004a8d;
+}
+.kategori-badge.event {
+  background-color: #d9534f;
+}
+.kategori-badge.pengumuman {
+  background-color: #f0ad4e;
+}
+.kategori-badge.prestasi {
+  background-color: #5cb85c;
+}
