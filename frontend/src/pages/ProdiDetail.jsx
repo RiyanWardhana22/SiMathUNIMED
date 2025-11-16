@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 
-const API_URL = "http://localhost/SiMathUNIMED/backend/";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function ProdiDetail() {
   const { id } = useParams();
