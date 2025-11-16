@@ -11,6 +11,7 @@ import BeritaDetail from "./pages/BeritaDetail";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/admin/Dashboard";
+import AdminTambahBerita from "./pages/admin/AdminTambahBerita";
 
 function App() {
   return (
@@ -32,6 +33,10 @@ function App() {
         <Route element={<Layout />}>
           <Route element={<ProtectedRoute />}>
             <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route
+              path="/admin/berita/tambah"
+              element={<AdminTambahBerita />}
+            />
           </Route>
         </Route>
       </Routes>
