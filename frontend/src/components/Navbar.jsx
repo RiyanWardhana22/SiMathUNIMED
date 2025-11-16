@@ -1,7 +1,14 @@
 import { Link } from "react-router-dom";
 import "../styles/Navbar.css";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 function Navbar() {
+  const { authUser, logout } = useContext(AuthContext);
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -29,11 +36,29 @@ function Navbar() {
               Berita
             </Link>
           </li>
-          <li className="navbar-item">
-            <Link to="/login" className="navbar-link">
-              Login
-            </Link>
-          </li>
+          {authUser ? (
+            <>
+              <li className="navbar-item">
+                <span
+                  className="navbar-link"
+                  style={{ color: "#f7f7f7", cursor: "default" }}
+                >
+                  Hi, {authUser.nama_lengkap}
+                </span>
+              </li>
+              <li className="navbar-item">
+                <button onClick={handleLogout} className="navbar-link-button">
+                  Logout
+                </button>
+              </li>
+            </>
+          ) : (
+            <li className="navbar-item">
+              <Link to="/login" className="navbar-link">
+                Login
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
     </nav>

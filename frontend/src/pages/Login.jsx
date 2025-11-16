@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
+import { AuthContext } from "../context/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -9,6 +11,8 @@ function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -22,9 +26,9 @@ function Login() {
       });
       if (response.data.status === "success") {
         console.log("Login Berhasil:", response.data.user);
-        alert(
-          "Login berhasil! Selamat datang, " + response.data.user.nama_lengkap
-        );
+        login(response.data.user);
+
+        navigate("/");
       } else {
         setError(response.data.message);
       }
