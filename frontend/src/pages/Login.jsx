@@ -26,7 +26,7 @@ function Login() {
       });
       if (response.data.status === "success") {
         console.log("Login Berhasil:", response.data.user);
-        login(response.data.user);
+        login(response.data);
 
         navigate("/");
       } else {
