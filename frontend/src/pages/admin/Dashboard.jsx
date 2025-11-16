@@ -68,6 +68,22 @@ function Dashboard() {
               Kelola Dosen & Staff
             </Link>
           </li>
+
+          <li style={{ marginBottom: "10px", marginTop: "10px" }}>
+            <Link
+              to="/admin/dokumen"
+              style={{
+                display: "inline-block",
+                padding: "8px 12px",
+                backgroundColor: "#337ab7",
+                color: "white",
+                textDecoration: "none",
+                borderRadius: "5px",
+              }}
+            >
+              Kelola Dokumen & File
+            </Link>
+          </li>
         </ul>
       </div>
     </div>
