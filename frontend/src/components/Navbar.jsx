@@ -39,6 +39,11 @@ function Navbar() {
           {authUser ? (
             <>
               <li className="navbar-item">
+                <Link to="/admin/dashboard" className="navbar-link">
+                  Dashboard
+                </Link>
+              </li>
+              <li className="navbar-item">
                 <span
                   className="navbar-link"
                   style={{ color: "#f7f7f7", cursor: "default" }}

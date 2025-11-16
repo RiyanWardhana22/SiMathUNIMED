@@ -9,11 +9,14 @@ import DosenDetail from "./pages/DosenDetail";
 import Berita from "./pages/Berita";
 import BeritaDetail from "./pages/BeritaDetail";
 import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Dashboard from "./pages/admin/Dashboard";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* ALL ROLE */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="profil" element={<Profil />} />
@@ -23,6 +26,13 @@ function App() {
           <Route path="berita" element={<Berita />} />
           <Route path="berita/:slug" element={<BeritaDetail />} />
           <Route path="login" element={<Login />} />
+        </Route>
+
+        {/* ROLE SUPERADMIN */}
+        <Route element={<Layout />}>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/admin/dashboard" element={<Dashboard />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
