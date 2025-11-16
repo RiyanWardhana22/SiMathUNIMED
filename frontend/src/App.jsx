@@ -14,6 +14,8 @@ import Dashboard from "./pages/admin/Dashboard";
 import AdminTambahBerita from "./pages/admin/AdminTambahBerita";
 import AdminKelolaBerita from "./pages/admin/AdminKelolaBerita";
 import AdminEditBerita from "./pages/admin/AdminEditBerita";
+import AdminKelolaDosen from "./pages/admin/AdminKelolaDosen";
+import AdminEditDosen from "./pages/admin/AdminEditDosen";
 
 function App() {
   return (
@@ -42,6 +44,8 @@ function App() {
             />
           </Route>
           <Route path="/admin/berita/edit/:id" element={<AdminEditBerita />} />
+          <Route path="/admin/dosen" element={<AdminKelolaDosen />} />
+          <Route path="/admin/dosen/edit/:id" element={<AdminEditDosen />} />
         </Route>
       </Routes>
     </BrowserRouter>

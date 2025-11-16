@@ -37,7 +37,7 @@ function Dashboard() {
           </li>
 
           {/* 1. TAMBAHKAN LINK "KELOLA" BARU */}
-          <li style={{ marginBottom: "10px" }}>
+          <li style={{ marginBottom: "10px", marginTop: "10px" }}>
             <Link
               to="/admin/berita"
               style={{
@@ -50,6 +50,22 @@ function Dashboard() {
               }}
             >
               Kelola Semua Postingan
+            </Link>
+          </li>
+
+          <li style={{ marginBottom: "10px", marginTop: "10px" }}>
+            <Link
+              to="/admin/dosen"
+              style={{
+                display: "inline-block",
+                padding: "8px 12px",
+                backgroundColor: "#f0ad4e",
+                color: "white",
+                textDecoration: "none",
+                borderRadius: "5px",
+              }}
+            >
+              Kelola Dosen & Staff
             </Link>
           </li>
         </ul>
