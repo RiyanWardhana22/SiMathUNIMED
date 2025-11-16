@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const API_URL = "http://localhost/SiMathUNIMED/backend/";
 
@@ -31,10 +32,8 @@ function Home() {
 
       <h3>Daftar Program Studi</h3>
 
-      {/* 1. Tampilkan status Loading */}
       {loading && <p>Mengambil data dari server...</p>}
 
-      {/* 2. Tampilkan status Error JIKA ADA */}
       {error && (
         <div style={{ color: "red", border: "1px solid red", padding: "10px" }}>
           <h4>Gagal Mengambil Data:</h4>
@@ -43,13 +42,16 @@ function Home() {
         </div>
       )}
 
-      {/* 3. Tampilkan data HANYA JIKA tidak loading DAN tidak error */}
       {!loading && !error && prodi && (
         <>
           {prodi.status === "success" ? (
             <ul>
+              {/* 2. UBAH BAGIAN INI */}
               {prodi.data.map((item) => (
-                <li key={item.id_prodi}>{item.nama_prodi}</li>
+                <li key={item.id_prodi}>
+                  {/* Buat link dinamis ke /prodi/ID_PRODI */}
+                  <Link to={`/prodi/${item.id_prodi}`}>{item.nama_prodi}</Link>
+                </li>
               ))}
             </ul>
           ) : (
