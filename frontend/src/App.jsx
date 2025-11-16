@@ -6,6 +6,7 @@ import Profil from "./pages/Profil";
 import ProdiDetail from "./pages/ProdiDetail";
 import Dosen from "./pages/Dosen";
 import DosenDetail from "./pages/DosenDetail";
+import Berita from "./pages/Berita";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="prodi/:id" element={<ProdiDetail />} />
           <Route path="dosen" element={<Dosen />} />
           <Route path="dosen/:id" element={<DosenDetail />} />
+          <Route path="berita" element={<Berita />} />
         </Route>
       </Routes>
     </BrowserRouter>

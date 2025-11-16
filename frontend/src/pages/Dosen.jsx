@@ -55,7 +55,7 @@ function Dosen() {
                   }}
                 >
                   <img
-                    src={`http://localhost/SiMathUNIMED/backend/uploads/images/${item.foto_profil}`}
+                    src={API_URL + `../uploads/images/${item.foto_profil}`}
                     alt={item.nama_dosen}
                     style={{
                       width: "50px",
