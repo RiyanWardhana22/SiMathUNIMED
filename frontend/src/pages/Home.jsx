@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api";
 import { Link } from "react-router-dom";
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 function Home() {
   const [prodi, setProdi] = useState(null);
@@ -13,7 +11,7 @@ function Home() {
     const fetchProdi = async () => {
       setError(null);
       try {
-        const response = await axios.get(API_URL + "get_prodi.php");
+        const response = await api.get("/get_prodi.php");
         setProdi(response.data);
       } catch (err) {
         console.error("Terjadi kesalahan:", err);
