@@ -1,9 +1,66 @@
+.home-header-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.home-sambutan {
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid #eee;
+}
+
+.home-statistik {
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.home-statistik h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.stat-item {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+}
+
+.stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #004a8d;
+}
+
+.stat-label {
+  display: block;
+  font-size: 1rem;
+  color: #555;
+  margin-top: 5px;
+}
+
+.home-prodi-highlight {
+  border-top: 1px solid #eee;
+  padding-top: 30px;
+}
 .prodi-card-container {
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
 }
-
 .prodi-card {
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
@@ -13,24 +70,20 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .prodi-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 12px rgba(0, 74, 141, 0.1);
 }
-
 .prodi-card h3 {
   color: #004a8d;
   margin-bottom: 10px;
 }
-
 .prodi-card p {
   font-size: 0.95rem;
   color: #555;
   min-height: 40px;
   margin-bottom: 20px;
 }
-
 .prodi-card-link {
   display: inline-block;
   background-color: #004a8d;
@@ -41,18 +94,18 @@
   font-weight: bold;
   transition: background-color 0.3s ease;
 }
-
 .prodi-card-link:hover {
   background-color: #003366;
 }
 
+/* Styling Berita  */
 .home-berita-terbaru {
   margin-top: 30px;
   padding-top: 30px;
   border-top: 1px solid #eee;
 }
 
-/* Tampilan di layar lebih besar (desktop) */
+/* Media Queries  */
 @media (min-width: 768px) {
   .prodi-card-container {
     grid-template-columns: repeat(2, 1fr);
@@ -60,11 +113,10 @@
 }
 
 @media (min-width: 992px) {
+  .home-header-grid {
+    grid-template-columns: 2fr 1fr;
+  }
   .prodi-card-container {
     grid-template-columns: repeat(4, 1fr);
   }
-}
-
-.home-sambutan {
-  margin-bottom: 30px;
 }

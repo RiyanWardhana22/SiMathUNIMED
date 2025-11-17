@@ -9,6 +9,7 @@ function Home() {
   const [prodi, setProdi] = useState([]);
   const [settings, setSettings] = useState(null);
   const [berita, setBerita] = useState([]);
+  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -20,28 +21,39 @@ function Home() {
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
-        const [prodiRes, settingsRes, beritaRes] = await Promise.all([
+        const [prodiRes, settingsRes, beritaRes, statsRes] = await Promise.all([
           api.get("/get_prodi.php"),
           api.get("/get_settings.php"),
           api.get("/get_berita.php"),
+          api.get("/get_stats.php"),
         ]);
 
+        // Handle Prodi
         if (prodiRes.data.status === "success") {
           setProdi(prodiRes.data.data);
         } else {
           setProdi([]);
         }
 
+        // Handle Settings
         if (settingsRes.data.status === "success") {
           setSettings(settingsRes.data.data);
         } else {
           setSettings(null);
         }
 
+        // Handle Berita
         if (beritaRes.data.status === "success") {
           setBerita(beritaRes.data.data.slice(0, 3));
         } else {
           setBerita([]);
+        }
+
+        // 3. HANDLE STATISTIK
+        if (statsRes.data.status === "success") {
+          setStats(statsRes.data.data);
+        } else {
+          setStats(null);
         }
       } catch (err) {
         console.error("Gagal mengambil data beranda:", err);
@@ -72,15 +84,44 @@ function Home() {
       {/* <div className="hero-slider">[Slider Banner]</div> */}
 
       <div className="container">
-        {/* BAGIAN 1: SAMBUTAN KETUA JURUSAN */}
-        {settings && (
-          <div className="home-sambutan">
-            <h2>Sambutan Ketua Jurusan</h2>
-            <pre className="profil-content">
-              {settings.sambutan_ketua_jurusan}
-            </pre>
-          </div>
-        )}
+        {/* BAGIAN 1: SAMBUTAN & STATISTIK */}
+        <div className="home-header-grid">
+          {settings && (
+            <div className="home-sambutan">
+              <h2>Sambutan Ketua Jurusan</h2>
+              <pre className="profil-content">
+                {settings.sambutan_ketua_jurusan}
+              </pre>
+            </div>
+          )}
+
+          {/* Sisi kanan: Statistik */}
+          {stats && settings && (
+            <div className="home-statistik">
+              <h3>TENTANG JURUSAN MATEMATIKA</h3>
+              <div className="stats-grid">
+                <div className="stat-item">
+                  <span className="stat-value">{stats.jumlah_dosen}</span>
+                  <span className="stat-label">Dosen</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-value">{stats.jumlah_mahasiswa}</span>
+                  <span className="stat-label">Mahasiswa</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-value">{stats.jumlah_prestasi}</span>
+                  <span className="stat-label">Prestasi</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-value">
+                    {settings.akreditasi_jurusan}
+                  </span>
+                  <span className="stat-label">Akreditasi</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* BAGIAN 2: HIGHLIGHT PROGRAM STUDI */}
         <div className="home-prodi-highlight">
@@ -108,16 +149,14 @@ function Home() {
           </div>
         </div>
 
-        {/* 5. TAMBAHKAN BAGIAN 3: BERITA TERBARU */}
+        {/* BAGIAN 3: BERITA TERBARU */}
         <div className="home-berita-terbaru">
           <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
             Berita & Event Terbaru
           </h2>
-          {/* Kita gunakan 'berita-list' dari Berita.css */}
           <div className="berita-list">
             {berita.length > 0 ? (
               berita.map((item) => (
-                // Kita gunakan 'berita-card' dari Berita.css
                 <div key={item.id_berita} className="berita-card">
                   <img
                     src={`${import.meta.env.VITE_API_URL}../uploads/images/${
@@ -146,7 +185,6 @@ function Home() {
               <p style={{ textAlign: "center" }}>Belum ada berita terbaru.</p>
             )}
           </div>
-          {/* Tombol untuk melihat semua berita */}
           <div style={{ textAlign: "center", marginTop: "30px" }}>
             <Link to="/berita" className="prodi-card-link">
               Lihat Semua Berita
