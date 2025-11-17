@@ -36,6 +36,22 @@ function Dashboard() {
             </Link>
           </li>
 
+          <li style={{ marginBottom: "10px", marginTop: "10px" }}>
+            <Link
+              to="/admin/slider"
+              style={{
+                display: "inline-block",
+                padding: "8px 12px",
+                backgroundColor: "#d9534f",
+                color: "white",
+                textDecoration: "none",
+                borderRadius: "5px",
+              }}
+            >
+              Kelola Slider Beranda
+            </Link>
+          </li>
+
           {/* 1. TAMBAHKAN LINK "KELOLA" BARU */}
           <li style={{ marginBottom: "10px", marginTop: "10px" }}>
             <Link

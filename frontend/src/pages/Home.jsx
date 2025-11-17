@@ -4,12 +4,14 @@ import { Link } from "react-router-dom";
 import "../styles/Home.css";
 import "../styles/Profil.css";
 import "../styles/Berita.css";
+import HomeSlider from "../components/HomeSlider";
 
 function Home() {
   const [prodi, setProdi] = useState([]);
   const [settings, setSettings] = useState(null);
   const [berita, setBerita] = useState([]);
   const [stats, setStats] = useState(null);
+  const [sliders, setSliders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -21,12 +23,14 @@ function Home() {
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
-        const [prodiRes, settingsRes, beritaRes, statsRes] = await Promise.all([
-          api.get("/get_prodi.php"),
-          api.get("/get_settings.php"),
-          api.get("/get_berita.php"),
-          api.get("/get_stats.php"),
-        ]);
+        const [prodiRes, settingsRes, beritaRes, statsRes, sliderRes] =
+          await Promise.all([
+            api.get("/get_prodi.php"),
+            api.get("/get_settings.php"),
+            api.get("/get_berita.php"),
+            api.get("/get_stats.php"),
+            api.get("/get_sliders.php"),
+          ]);
 
         // Handle Prodi
         if (prodiRes.data.status === "success") {
@@ -55,6 +59,13 @@ function Home() {
         } else {
           setStats(null);
         }
+
+        // 4. HANDLE SLIDERS
+        if (sliderRes.data.status === "success") {
+          setSliders(sliderRes.data.data);
+        } else {
+          setSliders([]);
+        }
       } catch (err) {
         console.error("Gagal mengambil data beranda:", err);
         setError("Gagal memuat data beranda.");
@@ -81,7 +92,7 @@ function Home() {
 
   return (
     <>
-      {/* <div className="hero-slider">[Slider Banner]</div> */}
+      {sliders.length > 0 && <HomeSlider slides={sliders} />}
 
       <div className="container">
         {/* BAGIAN 1: SAMBUTAN & STATISTIK */}

@@ -20,6 +20,7 @@ import AdminKelolaDokumen from "./pages/admin/AdminKelolaDokumen";
 import AdminPengaturan from "./pages/admin/AdminPengaturan";
 import AdminKelolaProdi from "./pages/admin/AdminKelolaProdi";
 import AdminEditProdi from "./pages/admin/AdminEditProdi";
+import AdminKelolaSlider from "./pages/admin/AdminKelolaSlider";
 import Akademik from "./pages/Akademik";
 
 function App() {
@@ -48,14 +49,18 @@ function App() {
               path="/admin/berita/tambah"
               element={<AdminTambahBerita />}
             />
+            <Route
+              path="/admin/berita/edit/:id"
+              element={<AdminEditBerita />}
+            />
+            <Route path="/admin/dosen" element={<AdminKelolaDosen />} />
+            <Route path="/admin/dosen/edit/:id" element={<AdminEditDosen />} />
+            <Route path="/admin/dokumen" element={<AdminKelolaDokumen />} />
+            <Route path="/admin/prodi" element={<AdminKelolaProdi />} />
+            <Route path="/admin/prodi/edit/:id" element={<AdminEditProdi />} />
+            <Route path="/admin/slider" element={<AdminKelolaSlider />} />
+            <Route path="/admin/pengaturan" element={<AdminPengaturan />} />
           </Route>
-          <Route path="/admin/berita/edit/:id" element={<AdminEditBerita />} />
-          <Route path="/admin/dosen" element={<AdminKelolaDosen />} />
-          <Route path="/admin/dosen/edit/:id" element={<AdminEditDosen />} />
-          <Route path="/admin/dokumen" element={<AdminKelolaDokumen />} />
-          <Route path="/admin/pengaturan" element={<AdminPengaturan />} />
-          <Route path="/admin/prodi" element={<AdminKelolaProdi />} />
-          <Route path="/admin/prodi/edit/:id" element={<AdminEditProdi />} />
         </Route>
       </Routes>
     </BrowserRouter>
