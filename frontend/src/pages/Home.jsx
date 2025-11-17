@@ -3,19 +3,27 @@ import api from "../api";
 import { Link } from "react-router-dom";
 import "../styles/Home.css";
 import "../styles/Profil.css";
+import "../styles/Berita.css";
 
 function Home() {
   const [prodi, setProdi] = useState([]);
   const [settings, setSettings] = useState(null);
+  const [berita, setBerita] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString("id-ID", options);
+  };
 
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
-        const [prodiRes, settingsRes] = await Promise.all([
+        const [prodiRes, settingsRes, beritaRes] = await Promise.all([
           api.get("/get_prodi.php"),
           api.get("/get_settings.php"),
+          api.get("/get_berita.php"),
         ]);
 
         if (prodiRes.data.status === "success") {
@@ -28,6 +36,12 @@ function Home() {
           setSettings(settingsRes.data.data);
         } else {
           setSettings(null);
+        }
+
+        if (beritaRes.data.status === "success") {
+          setBerita(beritaRes.data.data.slice(0, 3));
+        } else {
+          setBerita([]);
         }
       } catch (err) {
         console.error("Gagal mengambil data beranda:", err);
@@ -55,7 +69,6 @@ function Home() {
 
   return (
     <>
-      {/* Nanti kita tambahkan Slider Banner di sini */}
       {/* <div className="hero-slider">[Slider Banner]</div> */}
 
       <div className="container">
@@ -63,7 +76,6 @@ function Home() {
         {settings && (
           <div className="home-sambutan">
             <h2>Sambutan Ketua Jurusan</h2>
-            {/* Kita pinjam style dari 'Profil.css' */}
             <pre className="profil-content">
               {settings.sambutan_ketua_jurusan}
             </pre>
@@ -76,10 +88,9 @@ function Home() {
             Program Studi
           </h2>
           <div className="prodi-card-container">
-            {prodi.length > 0 ? (
+            {prodi.length > 0 &&
               prodi.map((item) => (
                 <div key={item.id_prodi} className="prodi-card">
-                  {/* (Nanti kita bisa tambahkan gambar ikon untuk tiap prodi) */}
                   <h3>{item.nama_prodi}</h3>
                   <p>
                     {item.deskripsi
@@ -93,14 +104,55 @@ function Home() {
                     Lihat Detail
                   </Link>
                 </div>
-              ))
-            ) : (
-              <p>Data program studi tidak tersedia.</p>
-            )}
+              ))}
           </div>
         </div>
 
-        {/* (Nanti kita tambahkan Quick Links & Statistik di sini) */}
+        {/* 5. TAMBAHKAN BAGIAN 3: BERITA TERBARU */}
+        <div className="home-berita-terbaru">
+          <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+            Berita & Event Terbaru
+          </h2>
+          {/* Kita gunakan 'berita-list' dari Berita.css */}
+          <div className="berita-list">
+            {berita.length > 0 ? (
+              berita.map((item) => (
+                // Kita gunakan 'berita-card' dari Berita.css
+                <div key={item.id_berita} className="berita-card">
+                  <img
+                    src={`${import.meta.env.VITE_API_URL}../uploads/images/${
+                      item.gambar_header || "default.jpg"
+                    }`}
+                    alt={item.judul}
+                    className="berita-card-image"
+                  />
+                  <div className="berita-card-content">
+                    <span className={`berita-card-kategori ${item.kategori}`}>
+                      {item.kategori}
+                    </span>
+                    <Link
+                      to={`/berita/${item.slug}`}
+                      className="berita-card-judul"
+                    >
+                      {item.judul}
+                    </Link>
+                    <small className="berita-card-meta">
+                      Dipublish pada {formatDate(item.tanggal_publish)}
+                    </small>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p style={{ textAlign: "center" }}>Belum ada berita terbaru.</p>
+            )}
+          </div>
+          {/* Tombol untuk melihat semua berita */}
+          <div style={{ textAlign: "center", marginTop: "30px" }}>
+            <Link to="/berita" className="prodi-card-link">
+              Lihat Semua Berita
+            </Link>
+          </div>
+        </div>
       </div>
     </>
   );
