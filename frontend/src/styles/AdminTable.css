@@ -98,3 +98,49 @@
   border-radius: 5px;
   border: 1px solid #f0f0f0;
 }
+
+/* Styling untuk daftar dosen di halaman prodi */
+.dosen-list-prodi {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.dosen-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.dosen-card-foto {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+  border: 2px solid #f0f0f0;
+}
+
+.dosen-card-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.dosen-card-nama {
+  font-weight: bold;
+  color: #004a8d;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+.dosen-card-nama:hover {
+  text-decoration: underline;
+}
+
+.dosen-card-keahlian {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 4px;
+}

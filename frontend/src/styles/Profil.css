@@ -1,0 +1,12 @@
+.profil-content {
+  white-space: pre-wrap;
+  font-family: inherit;
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+  background-color: #fdfdfd;
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #f0f0f0;
+  margin-bottom: 20px;
+}
