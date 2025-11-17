@@ -27,6 +27,11 @@ function Navbar() {
             </Link>
           </li>
           <li className="navbar-item">
+            <Link to="/akademik" className="navbar-link">
+              Akademik
+            </Link>
+          </li>
+          <li className="navbar-item">
             <Link to="/dosen" className="navbar-link">
               Dosen
             </Link>

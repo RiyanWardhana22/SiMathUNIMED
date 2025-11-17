@@ -20,6 +20,7 @@ import AdminKelolaDokumen from "./pages/admin/AdminKelolaDokumen";
 import AdminPengaturan from "./pages/admin/AdminPengaturan";
 import AdminKelolaProdi from "./pages/admin/AdminKelolaProdi";
 import AdminEditProdi from "./pages/admin/AdminEditProdi";
+import Akademik from "./pages/Akademik";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="berita" element={<Berita />} />
           <Route path="berita/:slug" element={<BeritaDetail />} />
           <Route path="login" element={<Login />} />
+          <Route path="akademik" element={<Akademik />} />
         </Route>
 
         {/* ROLE SUPERADMIN */}
