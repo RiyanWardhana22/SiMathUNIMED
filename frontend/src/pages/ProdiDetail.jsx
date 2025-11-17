@@ -55,6 +55,10 @@ function ProdiDetail() {
         <>
           <h2>{data.profil.nama_prodi}</h2>
 
+          <div className="akreditasi-badge">
+            Akreditasi: {data.profil.akreditasi || "N/A"}
+          </div>
+
           <h3 style={{ marginTop: "20px" }}>Deskripsi</h3>
           <pre className="profil-content">
             {data.profil.deskripsi || "Belum ada data."}

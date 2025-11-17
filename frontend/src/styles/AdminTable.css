@@ -144,3 +144,14 @@
   color: #555;
   margin-top: 4px;
 }
+
+.akreditasi-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  background-color: #004a8d;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-top: 10px;
+}

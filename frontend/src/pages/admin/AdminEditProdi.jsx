@@ -12,6 +12,7 @@ function AdminEditProdi() {
   const [visi, setVisi] = useState("");
   const [misi, setMisi] = useState("");
   const [profilLulusan, setProfilLulusan] = useState("");
+  const [akreditasi, setAkreditasi] = useState("");
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -29,6 +30,7 @@ function AdminEditProdi() {
           setVisi(prodi.visi || "");
           setMisi(prodi.misi || "");
           setProfilLulusan(prodi.profil_lulusan || "");
+          setAkreditasi(prodi.akreditasi || "");
         } else {
           setError(response.data.message);
         }
@@ -54,6 +56,7 @@ function AdminEditProdi() {
         visi: visi,
         misi: misi,
         profil_lulusan: profilLulusan,
+        akreditasi: akreditasi,
       });
 
       if (
@@ -91,6 +94,27 @@ function AdminEditProdi() {
         onSubmit={handleSubmit}
         style={{ maxWidth: "800px" }}
       >
+        <div className="form-group">
+          <label htmlFor="akreditasi">
+            Akreditasi (misal: "Unggul", "A", "Baik Sekali")
+          </label>
+          <input
+            type="text"
+            id="akreditasi"
+            value={akreditasi}
+            onChange={(e) => setAkreditasi(e.target.value)}
+            className="input-input"
+            style={{
+              width: "100%",
+              padding: "12px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              fontSize: "1rem",
+            }}
+            required
+          />
+        </div>
+
         <div className="form-group">
           <label htmlFor="deskripsi">Deskripsi Program Studi</label>
           <textarea
