@@ -22,6 +22,7 @@ import AdminKelolaProdi from "./pages/admin/AdminKelolaProdi";
 import AdminEditProdi from "./pages/admin/AdminEditProdi";
 import AdminKelolaSlider from "./pages/admin/AdminKelolaSlider";
 import Akademik from "./pages/Akademik";
+import AdminTambahDosen from "./pages/admin/AdminTambahDosen";
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
               element={<AdminEditBerita />}
             />
             <Route path="/admin/dosen" element={<AdminKelolaDosen />} />
+            <Route path="/admin/dosen/tambah" element={<AdminTambahDosen />} />
             <Route path="/admin/dosen/edit/:id" element={<AdminEditDosen />} />
             <Route path="/admin/dokumen" element={<AdminKelolaDokumen />} />
             <Route path="/admin/prodi" element={<AdminKelolaProdi />} />

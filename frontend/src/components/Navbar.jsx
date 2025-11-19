@@ -48,14 +48,14 @@ function Navbar() {
                   Dashboard
                 </Link>
               </li>
-              <li className="navbar-item">
+              {/* <li className="navbar-item">
                 <span
                   className="navbar-link"
                   style={{ color: "#f7f7f7", cursor: "default" }}
                 >
                   Hi, {authUser.nama_lengkap}
                 </span>
-              </li>
+              </li> */}
               <li className="navbar-item">
                 <button onClick={handleLogout} className="navbar-link-button">
                   Logout

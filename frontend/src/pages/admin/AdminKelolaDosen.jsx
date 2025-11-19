@@ -50,8 +50,9 @@ function AdminKelolaDosen() {
         }}
       >
         <h2>Kelola Dosen & Staff</h2>
-        {/* <Link to="/admin/dosen/tambah" className="btn-primary">+ Tambah Dosen</Link> */}
-        {/* (Kita buat tombol tambah nanti) */}
+        <Link to="/admin/dosen/tambah" className="btn-primary">
+          + Tambah Dosen
+        </Link>
       </div>
 
       <table className="admin-table">
