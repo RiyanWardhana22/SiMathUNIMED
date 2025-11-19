@@ -7,9 +7,12 @@ function AdminTambahBerita() {
   const [judul, setJudul] = useState("");
   const [isiBerita, setIsiBerita] = useState("");
   const [kategori, setKategori] = useState("berita");
+  const [gambarFile, setGambarFile] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -17,24 +20,30 @@ function AdminTambahBerita() {
     setLoading(true);
     setError(null);
     setSuccess(null);
+
     if (!judul || !isiBerita) {
       setError("Judul dan Isi Berita tidak boleh kosong.");
       setLoading(false);
       return;
     }
+
+    const formData = new FormData();
+    formData.append("judul", judul);
+    formData.append("isi_berita", isiBerita);
+    formData.append("kategori", kategori);
+    if (gambarFile) {
+      formData.append("gambar_header", gambarFile);
+    }
+
     try {
-      const response = await api.post("/create_berita.php", {
-        judul: judul,
-        isi_berita: isiBerita,
-        kategori: kategori,
+      const response = await api.post("/create_berita.php", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
+
       if (response.data.status === "success") {
         setSuccess("Berita baru berhasil ditambahkan!");
-        setJudul("");
-        setIsiBerita("");
-        setKategori("berita");
         setTimeout(() => {
-          navigate("/berita");
+          navigate("/admin/berita");
         }, 1500);
       } else {
         setError(response.data.message);
@@ -50,6 +59,7 @@ function AdminTambahBerita() {
   return (
     <div className="container">
       <h2>Tambah Berita / Event Baru</h2>
+
       <form
         className="login-form"
         onSubmit={handleSubmit}
@@ -62,6 +72,7 @@ function AdminTambahBerita() {
             id="judul"
             value={judul}
             onChange={(e) => setJudul(e.target.value)}
+            required
           />
         </div>
 
@@ -87,6 +98,22 @@ function AdminTambahBerita() {
         </div>
 
         <div className="form-group">
+          <label htmlFor="gambar">Gambar Header (Opsional)</label>
+          <input
+            type="file"
+            id="gambar"
+            onChange={(e) => setGambarFile(e.target.files[0])}
+            style={{
+              width: "100%",
+              padding: "12px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+            }}
+            accept="image/*"
+          />
+        </div>
+
+        <div className="form-group">
           <label htmlFor="isiBerita">Isi Berita</label>
           <textarea
             id="isiBerita"
@@ -100,13 +127,12 @@ function AdminTambahBerita() {
               borderRadius: "4px",
               fontSize: "1rem",
             }}
+            required
           />
         </div>
 
-        {/* Tampilkan pesan Error */}
         {error && <div className="error-message">{error}</div>}
 
-        {/* Tampilkan pesan Sukses */}
         {success && (
           <div
             style={{
