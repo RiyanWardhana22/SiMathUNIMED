@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
+import "../styles/Dosen.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -34,71 +35,92 @@ function DosenDetail() {
     fetchDosenDetail();
   }, [id]);
 
-  if (loading) {
+  if (loading)
     return (
-      <div className="container">
-        <p>Loading profil dosen...</p>
+      <div
+        className="container"
+        style={{ padding: "50px", textAlign: "center" }}
+      >
+        <p>Loading profil...</p>
       </div>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
-      <div className="container" style={{ color: "red" }}>
-        <p>Error: {error}</p>
-        <Link to="/dosen">Kembali ke Daftar Dosen</Link>
+      <div
+        className="container"
+        style={{ color: "red", padding: "50px", textAlign: "center" }}
+      >
+        <h3>Error</h3>
+        <p>{error}</p>
+        <Link to="/dosen" className="btn-back-profile">
+          &larr; Kembali
+        </Link>
       </div>
     );
-  }
 
   return (
     <div className="container">
       {dosen ? (
-        <>
-          <img
-            src={API_URL + `../uploads/images/${dosen.foto_profil}`}
-            alt={dosen.nama_dosen}
-            style={{
-              width: "150px",
-              height: "150px",
-              borderRadius: "50%",
-              objectFit: "cover",
-              float: "left",
-              marginRight: "20px",
-            }}
-          />
-          <h2>{dosen.nama_dosen}</h2>
-          <p style={{ color: "#555", fontSize: "1.2rem" }}>{dosen.nip}</p>
+        <div className="profile-wrapper">
+          {/* KOLOM KIRI: SIDEBAR */}
+          <div className="profile-sidebar">
+            <img
+              src={API_URL + `../uploads/images/${dosen.foto_profil}`}
+              alt={dosen.nama_dosen}
+              className="profile-photo-lg"
+              onError={(e) => {
+                e.target.src = API_URL + "../uploads/images/default.jpg";
+              }}
+            />
+            <h1 className="profile-name-lg">{dosen.nama_dosen}</h1>
+            <span className="profile-nip-lg">{dosen.nip}</span>
 
-          <div style={{ clear: "both", paddingTop: "20px" }}>
-            <h3>Program Studi:</h3>
-            <p>{dosen.nama_prodi}</p>
-
-            <h3>Bidang Keahlian:</h3>
-            <p>{dosen.bidang_keahlian}</p>
-
-            <h3>Jadwal Konsultasi:</h3>
-            <p>{dosen.jadwal_konsultasi || "Belum diatur"}</p>
-
-            <h3>Link Google Scholar:</h3>
             {dosen.link_google_scholar ? (
               <a
                 href={dosen.link_google_scholar}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="btn-scholar"
               >
-                Lihat Publikasi
+                Google Scholar
               </a>
             ) : (
-              <p>Belum ditautkan</p>
+              <span style={{ color: "#999", fontSize: "0.9rem" }}>
+                Google Scholar belum ditautkan
+              </span>
             )}
+
+            <br />
+            <Link
+              to="/dosen"
+              className="btn-back-profile"
+              style={{ marginTop: "30px", display: "inline-block" }}
+            >
+              &larr; Kembali ke Daftar
+            </Link>
           </div>
 
-          <br />
-          <Link to="/dosen">Kembali ke Daftar Dosen</Link>
-        </>
+          {/* KOLOM KANAN: KONTEN */}
+          <div className="profile-content">
+            <div className="profile-section">
+              <h3>Program Studi</h3>
+              <p>{dosen.nama_prodi}</p>
+            </div>
+
+            <div className="profile-section">
+              <h3>Bidang Keahlian</h3>
+              <p>{dosen.bidang_keahlian || "-"}</p>
+            </div>
+
+            <div className="profile-section">
+              <h3>Jadwal Konsultasi</h3>
+              <p>{dosen.jadwal_konsultasi || "Belum diatur"}</p>
+            </div>
+          </div>
+        </div>
       ) : (
-        <p>Data dosen tidak ditemukan.</p>
+        <p style={{ textAlign: "center" }}>Data dosen tidak ditemukan.</p>
       )}
     </div>
   );

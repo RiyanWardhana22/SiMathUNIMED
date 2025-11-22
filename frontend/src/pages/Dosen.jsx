@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import "../styles/Dosen.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -28,14 +29,39 @@ function Dosen() {
 
   return (
     <div className="container">
-      <h2>Manajemen Dosen & Staff</h2>
-      <p>Daftar dosen pengajar di Jurusan Matematika UNIMED.</p>
+      <div style={{ textAlign: "center", marginBottom: "40px" }}>
+        <h2 style={{ fontSize: "2rem", color: "#333", marginBottom: "10px" }}>
+          Dosen & Staff Pengajar
+        </h2>
+        <p style={{ color: "#666" }}>
+          Tim pengajar profesional dan berpengalaman di Jurusan Matematika
+          UNIMED.
+        </p>
+        <div
+          style={{
+            width: "60px",
+            height: "4px",
+            background: "#004a8d",
+            margin: "20px auto",
+          }}
+        ></div>
+      </div>
 
-      {loading && <p>Mengambil data dosen...</p>}
+      {loading && (
+        <p style={{ textAlign: "center" }}>Mengambil data dosen...</p>
+      )}
 
       {error && (
-        <div style={{ color: "red", border: "1px solid red", padding: "10px" }}>
-          <h4>Gagal Mengambil Data:</h4>
+        <div
+          style={{
+            color: "red",
+            border: "1px solid red",
+            padding: "20px",
+            borderRadius: "8px",
+            textAlign: "center",
+          }}
+        >
+          <h4>Gagal Mengambil Data</h4>
           <p>{error}</p>
         </div>
       )}
@@ -43,44 +69,34 @@ function Dosen() {
       {!loading && !error && dosen && (
         <>
           {dosen.status === "success" ? (
-            <div className="dosen-list">
+            <div className="dosen-grid">
               {dosen.data.map((item) => (
-                <div
+                <Link
+                  to={`/dosen/${item.id_dosen}`}
                   key={item.id_dosen}
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "10px",
-                    margin: "10px 0",
-                    borderRadius: "5px",
-                  }}
+                  className="dosen-card-public"
                 >
-                  <img
-                    src={API_URL + `../uploads/images/${item.foto_profil}`}
-                    alt={item.nama_dosen}
-                    style={{
-                      width: "50px",
-                      height: "50px",
-                      borderRadius: "50%",
-                      marginRight: "15px",
-                      objectFit: "cover",
-                    }}
-                  />
+                  <div className="dosen-img-wrapper">
+                    <img
+                      src={API_URL + `../uploads/images/${item.foto_profil}`}
+                      alt={item.nama_dosen}
+                      onError={(e) => {
+                        e.target.src =
+                          API_URL + "../uploads/images/default.jpg";
+                      }}
+                    />
+                  </div>
 
-                  <Link
-                    to={`/dosen/${item.id_dosen}`}
-                    style={{ fontWeight: "bold", fontSize: "1.1rem" }}
-                  >
-                    {item.nama_dosen}
-                  </Link>
-                  <br />
-                  <small style={{ color: "#555" }}>{item.nip}</small>
-                  <br />
-                  <small>{item.nama_prodi}</small>
-                </div>
+                  <h3 className="dosen-name">{item.nama_dosen}</h3>
+                  <span className="dosen-nip">{item.nip}</span>
+                  <span className="dosen-prodi">{item.nama_prodi}</span>
+                </Link>
               ))}
             </div>
           ) : (
-            <p>{dosen.message}</p>
+            <p style={{ textAlign: "center" }}>
+              Tidak ada data dosen ditemukan.
+            </p>
           )}
         </>
       )}
