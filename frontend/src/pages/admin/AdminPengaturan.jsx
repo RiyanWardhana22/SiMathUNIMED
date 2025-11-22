@@ -1,37 +1,61 @@
 import { useState, useEffect } from "react";
 import api from "../../api";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 import "../../styles/Login.css";
+
+const tabStyle = {
+  padding: "10px 20px",
+  cursor: "pointer",
+  borderBottom: "2px solid transparent",
+  fontWeight: "bold",
+  color: "#666",
+};
+const activeTabStyle = {
+  ...tabStyle,
+  borderBottom: "2px solid #004a8d",
+  color: "#004a8d",
+};
 
 function AdminPengaturan() {
   const [visi, setVisi] = useState("");
   const [misi, setMisi] = useState("");
   const [sejarah, setSejarah] = useState("");
   const [sambutan, setSambutan] = useState("");
+
   const [fileStruktur, setFileStruktur] = useState(null);
   const [existingGambar, setExistingGambar] = useState("default_struktur.jpg");
+  const [previewUrl, setPreviewUrl] = useState(null);
+
+  const [activeTab, setActiveTab] = useState("umum");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const modules = {
+    toolbar: [
+      ["bold", "italic", "underline"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["clean"],
+    ],
+  };
 
   useEffect(() => {
     const fetchSettings = async () => {
       try {
         const response = await api.get("/get_settings.php");
         if (response.data.status === "success") {
-          const settings = response.data.data;
-          setVisi(settings.visi_jurusan || "");
-          setMisi(settings.misi_jurusan || "");
-          setSejarah(settings.sejarah_jurusan || "");
-          setSambutan(settings.sambutan_ketua_jurusan || "");
+          const s = response.data.data;
+          setVisi(s.visi_jurusan || "");
+          setMisi(s.misi_jurusan || "");
+          setSejarah(s.sejarah_jurusan || "");
+          setSambutan(s.sambutan_ketua_jurusan || "");
           setExistingGambar(
-            settings.gambar_struktur_organisasi || "default_struktur.jpg"
+            s.gambar_struktur_organisasi || "default_struktur.jpg"
           );
-        } else {
-          setError("Gagal mengambil data pengaturan.");
         }
       } catch (err) {
-        setError(err.response?.data?.message || "Gagal terhubung ke server.");
+        setError("Gagal koneksi.");
       } finally {
         setLoading(false);
       }
@@ -40,8 +64,13 @@ function AdminPengaturan() {
   }, []);
 
   const handleFileChange = (e) => {
-    setFileStruktur(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      setFileStruktur(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
@@ -49,30 +78,24 @@ function AdminPengaturan() {
     setSuccess(null);
 
     const formData = new FormData();
-
     formData.append("visi_jurusan", visi);
     formData.append("misi_jurusan", misi);
     formData.append("sejarah_jurusan", sejarah);
     formData.append("sambutan_ketua_jurusan", sambutan);
 
-    // Tambahkan file HANYA JIKA user memilih file baru
     if (fileStruktur) {
       formData.append("gambar_struktur", fileStruktur);
     }
 
     try {
       const response = await api.post("/update_settings.php", formData);
-
       if (response.data.status === "success") {
-        setSuccess("Pengaturan website berhasil diperbarui!");
-        setFileStruktur(null); // Reset file input
-        // Refresh gambar jika ada yang baru diupload (opsional, perlu handling response)
+        setSuccess("Pengaturan berhasil diperbarui!");
       } else {
         setError(response.data.message);
       }
     } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.message || "Terjadi kesalahan server.");
+      setError("Terjadi kesalahan server.");
     } finally {
       setSaving(false);
     }
@@ -81,101 +104,178 @@ function AdminPengaturan() {
   if (loading)
     return (
       <div className="container">
-        <p>Loading pengaturan...</p>
+        <p>Loading...</p>
       </div>
     );
 
   return (
     <div className="container">
-      <h2>Pengaturan Website Jurusan</h2>
-      <p>Edit konten yang tampil di halaman profil, sambutan, dan lainnya.</p>
+      <h2>Pengaturan Website</h2>
+
+      {/* TAB NAVIGATION */}
+      <div
+        style={{
+          display: "flex",
+          borderBottom: "1px solid #ccc",
+          marginBottom: "20px",
+        }}
+      >
+        <div
+          style={activeTab === "umum" ? activeTabStyle : tabStyle}
+          onClick={() => setActiveTab("umum")}
+        >
+          Sambutan & Sejarah
+        </div>
+        <div
+          style={activeTab === "visimisi" ? activeTabStyle : tabStyle}
+          onClick={() => setActiveTab("visimisi")}
+        >
+          Visi & Misi
+        </div>
+        <div
+          style={activeTab === "struktur" ? activeTabStyle : tabStyle}
+          onClick={() => setActiveTab("struktur")}
+        >
+          Struktur Organisasi
+        </div>
+      </div>
 
       <form
         className="login-form"
         onSubmit={handleSubmit}
-        style={{ maxWidth: "800px", marginTop: "20px" }}
+        style={{ maxWidth: "900px", padding: "30px" }}
       >
-        <div className="form-group">
-          <label htmlFor="sambutan">Sambutan Ketua Jurusan</label>
-          <textarea
-            id="sambutan"
-            value={sambutan}
-            onChange={(e) => setSambutan(e.target.value)}
-            rows="5"
-            className="textarea-input"
-          />
+        {/* TAB 1: UMUM */}
+        {activeTab === "umum" && (
+          <>
+            <div className="form-group">
+              <label>Sambutan Ketua Jurusan</label>
+              <div style={{ background: "#fff" }}>
+                <ReactQuill
+                  theme="snow"
+                  value={sambutan}
+                  onChange={setSambutan}
+                  modules={modules}
+                />
+              </div>
+            </div>
+            <div className="form-group">
+              <label>Sejarah Jurusan</label>
+              <div style={{ background: "#fff" }}>
+                <ReactQuill
+                  theme="snow"
+                  value={sejarah}
+                  onChange={setSejarah}
+                  modules={modules}
+                />
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* TAB 2: VISI MISI */}
+        {activeTab === "visimisi" && (
+          <>
+            <div className="form-group">
+              <label>Visi Jurusan</label>
+              <div style={{ background: "#fff" }}>
+                <ReactQuill
+                  theme="snow"
+                  value={visi}
+                  onChange={setVisi}
+                  modules={modules}
+                />
+              </div>
+            </div>
+            <div className="form-group">
+              <label>Misi Jurusan</label>
+              <div style={{ background: "#fff" }}>
+                <ReactQuill
+                  theme="snow"
+                  value={misi}
+                  onChange={setMisi}
+                  modules={modules}
+                  style={{ height: "200px", marginBottom: "50px" }}
+                />
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* TAB 3: STRUKTUR */}
+        {activeTab === "struktur" && (
+          <div style={{ textAlign: "center" }}>
+            <label
+              style={{
+                display: "block",
+                marginBottom: "10px",
+                fontWeight: "bold",
+              }}
+            >
+              Gambar Struktur Saat Ini
+            </label>
+            <div
+              style={{
+                border: "1px solid #ddd",
+                padding: "10px",
+                borderRadius: "8px",
+                marginBottom: "20px",
+                background: "#f9f9f9",
+              }}
+            >
+              <img
+                src={
+                  previewUrl ||
+                  `${
+                    import.meta.env.VITE_API_URL
+                  }../uploads/images/${existingGambar}`
+                }
+                alt="Struktur"
+                style={{ maxWidth: "100%", maxHeight: "400px" }}
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Upload Gambar Baru</label>
+              <input
+                type="file"
+                onChange={handleFileChange}
+                accept="image/*"
+                className="file-input"
+                style={{ width: "100%" }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* TOMBOL SAVE (SELALU MUNCUL) */}
+        <div
+          style={{
+            marginTop: "30px",
+            borderTop: "1px solid #eee",
+            paddingTop: "20px",
+          }}
+        >
+          {error && <div className="error-message">{error}</div>}
+          {success && (
+            <div
+              style={{
+                color: "green",
+                background: "#e6fffa",
+                padding: "10px",
+                borderRadius: "4px",
+                marginBottom: "10px",
+                textAlign: "center",
+              }}
+            >
+              {success}
+            </div>
+          )}
+
+          <button type="submit" className="login-button" disabled={saving}>
+            {saving ? "Menyimpan..." : "Simpan Semua Perubahan"}
+          </button>
         </div>
-
-        <div className="form-group">
-          <label htmlFor="sejarah">Sejarah Jurusan</label>
-          <textarea
-            id="sejarah"
-            value={sejarah}
-            onChange={(e) => setSejarah(e.target.value)}
-            rows="5"
-            className="textarea-input"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="visi">Visi Jurusan</label>
-          <textarea
-            id="visi"
-            value={visi}
-            onChange={(e) => setVisi(e.target.value)}
-            rows="3"
-            className="textarea-input"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="misi">Misi Jurusan</label>
-          <textarea
-            id="misi"
-            value={misi}
-            onChange={(e) => setMisi(e.target.value)}
-            rows="5"
-            className="textarea-input"
-          />
-        </div>
-
-        <hr style={{ margin: "20px 0" }} />
-
-        <div className="form-group">
-          <label>Gambar Struktur Organisasi Saat Ini</label>
-          <img
-            src={`${
-              import.meta.env.VITE_API_URL
-            }../uploads/images/${existingGambar}`}
-            alt="Struktur Organisasi"
-            style={{
-              width: "100%",
-              maxWidth: "400px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-            }}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="gambar_struktur">
-            Upload Gambar Struktur Baru (Opsional)
-          </label>
-          <input
-            type="file"
-            id="gambar_struktur"
-            onChange={handleFileChange}
-            accept="image/*"
-            className="file-input"
-          />
-        </div>
-
-        {error && <div className="error-message">{error}</div>}
-        {success && <div className="success-message">{success}</div>}
-
-        <button type="submit" className="login-button" disabled={saving}>
-          {saving ? "Menyimpan..." : "Simpan Pengaturan"}
-        </button>
       </form>
     </div>
   );
