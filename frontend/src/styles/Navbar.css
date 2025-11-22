@@ -31,6 +31,7 @@
   letter-spacing: 1px;
   display: flex;
   align-items: center;
+  font-family: "Times New Roman", Times, serif;
 }
 
 .menu-icon {
@@ -99,13 +100,16 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 90vh;
+    position: fixed;
     top: 80px;
     left: -100%;
     opacity: 1;
     transition: all 0.5s ease;
-    background-color: #003366;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(180deg, #003366 0%, #004a8d 100%);
+    box-shadow: none;
+    z-index: 998;
+    overflow-y: auto;
+    padding-bottom: 100px;
   }
 
   .navbar-menu.active {
@@ -113,7 +117,7 @@
   }
 
   .navbar-item {
-    height: 80px;
+    height: auto;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -122,18 +126,18 @@
   .navbar-link,
   .navbar-link-button {
     text-align: center;
-    padding: 2rem;
+    padding: 1.5rem;
     width: 100%;
     display: table;
-    border-bottom: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .navbar-link:hover,
   .navbar-link-button:hover {
-    background-color: #004a8d;
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 0;
-    border-bottom: none;
-    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f0ad4e;
   }
 
   .menu-icon {
@@ -145,9 +149,11 @@
     font-size: 1.8rem;
     cursor: pointer;
     color: #fff;
+    z-index: 1000;
   }
 
   .navbar-logo {
     font-size: 1.5rem;
+    z-index: 1000;
   }
 }

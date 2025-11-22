@@ -23,7 +23,6 @@ function Navbar() {
           SiMathUNIMED
         </Link>
 
-        {/* IKON HAMBURGER (Hanya muncul di Mobile) */}
         <div className="menu-icon" onClick={handleClick}>
           {click ? <FaTimes /> : <FaBars />}
         </div>
