@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../../api";
 import "../../styles/AdminTable.css";
+import { FaTrashAlt, FaPencilAlt } from "react-icons/fa";
 
 function AdminKelolaUsers() {
   const [users, setUsers] = useState([]);
@@ -101,11 +102,17 @@ function AdminKelolaUsers() {
                 </span>
               </td>
               <td>
+                <Link
+                  to={`/admin/users/edit/${user.id_user}`}
+                  className="btn-edit"
+                >
+                  <FaPencilAlt />
+                </Link>
                 <button
                   onClick={() => handleDelete(user.id_user)}
                   className="btn-hapus"
                 >
-                  Hapus
+                  <FaTrashAlt />
                 </button>
               </td>
             </tr>
