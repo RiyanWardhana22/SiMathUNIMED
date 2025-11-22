@@ -9,6 +9,15 @@ try {
             $res = $conn->query("SELECT COUNT(*) as total FROM dosen");
             $response['data']['dosen'] = $res->fetch_assoc()['total'];
 
+            $res = $conn->query("SELECT COUNT(*) as total FROM program_studi");
+            $response['data']['program_studi'] = $res->fetch_assoc()['total'];
+
+            $res = $conn->query("SELECT COUNT(*) as total FROM users WHERE role = 'mahasiswa'");
+            $response['data']['mahasiswa'] = $res->fetch_assoc()['total'];
+
+            $res = $conn->query("SELECT COUNT(*) as total FROM berita WHERE kategori = 'prestasi'");
+            $response['data']['prestasi'] = $res->fetch_assoc()['total'];
+
             $res = $conn->query("SELECT COUNT(*) as total FROM berita");
             $response['data']['berita'] = $res->fetch_assoc()['total'];
 

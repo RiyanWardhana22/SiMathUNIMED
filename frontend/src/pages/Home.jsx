@@ -2,9 +2,14 @@ import { useState, useEffect } from "react";
 import api from "../api";
 import { Link } from "react-router-dom";
 import "../styles/Home.css";
-import "../styles/Profil.css";
-import "../styles/Berita.css";
+import "../styles/Berita.css"; // Gunakan style kartu berita yang sudah bagus
 import HomeSlider from "../components/HomeSlider";
+import {
+  FaUniversity,
+  FaLaptopCode,
+  FaChartBar,
+  FaCalculator,
+} from "react-icons/fa"; // Ikon Prodi
 
 function Home() {
   const [prodi, setProdi] = useState([]);
@@ -14,6 +19,16 @@ function Home() {
   const [sliders, setSliders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Fungsi helper untuk memilih ikon prodi
+  const getProdiIcon = (nama) => {
+    const n = nama.toLowerCase();
+    if (n.includes("komputer") || n.includes("informatika"))
+      return <FaLaptopCode />;
+    if (n.includes("statistika")) return <FaChartBar />;
+    if (n.includes("pendidikan")) return <FaUniversity />;
+    return <FaCalculator />; // Default Matematika
+  };
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
@@ -32,40 +47,14 @@ function Home() {
             api.get("/get_sliders.php"),
           ]);
 
-        // Handle Prodi
-        if (prodiRes.data.status === "success") {
-          setProdi(prodiRes.data.data);
-        } else {
-          setProdi([]);
-        }
-
-        // Handle Settings
-        if (settingsRes.data.status === "success") {
+        if (prodiRes.data.status === "success") setProdi(prodiRes.data.data);
+        if (settingsRes.data.status === "success")
           setSettings(settingsRes.data.data);
-        } else {
-          setSettings(null);
-        }
-
-        // Handle Berita
-        if (beritaRes.data.status === "success") {
-          setBerita(beritaRes.data.data.slice(0, 3));
-        } else {
-          setBerita([]);
-        }
-
-        // 3. HANDLE STATISTIK
-        if (statsRes.data.status === "success") {
-          setStats(statsRes.data.data);
-        } else {
-          setStats(null);
-        }
-
-        // 4. HANDLE SLIDERS
-        if (sliderRes.data.status === "success") {
+        if (beritaRes.data.status === "success")
+          setBerita(beritaRes.data.data.slice(0, 3)); // Ambil 3 berita terbaru
+        if (statsRes.data.status === "success") setStats(statsRes.data.data);
+        if (sliderRes.data.status === "success")
           setSliders(sliderRes.data.data);
-        } else {
-          setSliders([]);
-        }
       } catch (err) {
         console.error("Gagal mengambil data beranda:", err);
         setError("Gagal memuat data beranda.");
@@ -79,92 +68,136 @@ function Home() {
 
   if (loading)
     return (
-      <div className="container">
-        <p>Loading...</p>
+      <div
+        className="container"
+        style={{
+          textAlign: "center",
+          padding: "100px 20px",
+          minHeight: "60vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <p style={{ fontSize: "1.2rem", color: "#666" }}>Loading...</p>
       </div>
     );
+
   if (error)
     return (
-      <div className="container">
-        <p style={{ color: "red" }}>{error}</p>
+      <div
+        className="container"
+        style={{
+          textAlign: "center",
+          padding: "100px 20px",
+          color: "red",
+          minHeight: "60vh",
+        }}
+      >
+        <p>{error}</p>
       </div>
     );
 
   return (
-    <>
+    <div className="home-page">
+      {/* 1. SLIDER SECTION (Full Width) */}
       {sliders.length > 0 && <HomeSlider slides={sliders} />}
 
-      <div className="container">
-        {/* BAGIAN 1: SAMBUTAN & STATISTIK */}
-        <div className="home-header-grid">
-          {settings && (
-            <div className="home-sambutan">
+      {/* 2. SAMBUTAN SECTION */}
+      {settings && (
+        <section className="home-section home-sambutan-section">
+          <div className="sambutan-container">
+            <div className="section-title">
               <h2>Sambutan Ketua Jurusan</h2>
-              <pre className="profil-content">
-                {settings.sambutan_ketua_jurusan}
-              </pre>
             </div>
-          )}
+            {/* Gunakan div biasa untuk konten HTML */}
+            <div
+              className="sambutan-content"
+              dangerouslySetInnerHTML={{
+                __html:
+                  settings.sambutan_ketua_jurusan ||
+                  "<p>Selamat Datang di Jurusan Matematika UNIMED.</p>",
+              }}
+            />
+          </div>
+        </section>
+      )}
 
-          {/* Sisi kanan: Statistik */}
-          {stats && settings && (
-            <div className="home-statistik">
-              <h3>TENTANG JURUSAN MATEMATIKA</h3>
-              <div className="stats-grid">
-                <div className="stat-item">
-                  <span className="stat-value">{stats.jumlah_dosen}</span>
-                  <span className="stat-label">Dosen</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-value">{stats.jumlah_mahasiswa}</span>
-                  <span className="stat-label">Mahasiswa</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-value">{stats.jumlah_prestasi}</span>
-                  <span className="stat-label">Prestasi</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-value">
-                    {settings.akreditasi_jurusan}
-                  </span>
-                  <span className="stat-label">Akreditasi</span>
-                </div>
-              </div>
+      {/* 3. STATISTIK SECTION (Full Width Blue) */}
+      {stats && settings && (
+        <section className="home-stats-section">
+          <div className="stats-grid">
+            <div className="stat-item">
+              <span className="stat-value">{stats.dosen}</span>
+              <span className="stat-label">Dosen & Staff</span>
             </div>
-          )}
-        </div>
+            <div className="stat-item">
+              <span className="stat-value">928 +</span>
+              <span className="stat-label">Mahasiswa Aktif</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value">{stats.prestasi}</span>
+              <span className="stat-label">Prestasi Diraih</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value">{stats.program_studi}</span>
+              <span className="stat-label">Program Studi</span>
+            </div>
+          </div>
+        </section>
+      )}
 
-        {/* BAGIAN 2: HIGHLIGHT PROGRAM STUDI */}
-        <div className="home-prodi-highlight">
-          <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-            Program Studi
-          </h2>
+      {/* 4. PRODI HIGHLIGHT SECTION */}
+      <section className="home-section home-prodi-section">
+        <div className="container">
+          <div className="section-title">
+            <h2>Program Studi</h2>
+            <p>Pilihan program studi unggulan untuk masa depan Anda.</p>
+          </div>
+
           <div className="prodi-card-container">
-            {prodi.length > 0 &&
+            {prodi.length > 0 ? (
               prodi.map((item) => (
                 <div key={item.id_prodi} className="prodi-card">
+                  <div className="prodi-icon">
+                    {getProdiIcon(item.nama_prodi)}
+                  </div>
                   <h3>{item.nama_prodi}</h3>
+                  {/* Hapus tag HTML dari deskripsi singkat agar rapi di card */}
                   <p>
                     {item.deskripsi
-                      ? item.deskripsi.substring(0, 100) + "..."
+                      ? item.deskripsi
+                          .replace(/<[^>]+>/g, "") // Regex hapus HTML
+                          .substring(0, 100) + "..."
                       : "Info detail..."}
                   </p>
                   <Link
                     to={`/prodi/${item.id_prodi}`}
                     className="prodi-card-link"
                   >
-                    Lihat Detail
+                    Selengkapnya
                   </Link>
                 </div>
-              ))}
+              ))
+            ) : (
+              <p style={{ textAlign: "center", width: "100%" }}>
+                Data program studi tidak tersedia.
+              </p>
+            )}
           </div>
         </div>
+      </section>
 
-        {/* BAGIAN 3: BERITA TERBARU */}
-        <div className="home-berita-terbaru">
-          <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-            Berita & Event Terbaru
-          </h2>
+      {/* 5. BERITA TERBARU SECTION */}
+      <section className="home-section home-berita-section">
+        <div className="container">
+          <div className="section-title">
+            <h2>Berita & Agenda Terbaru</h2>
+            <p>
+              Ikuti perkembangan dan kegiatan terbaru di Jurusan Matematika.
+            </p>
+          </div>
+
           <div className="berita-list">
             {berita.length > 0 ? (
               berita.map((item) => (
@@ -175,6 +208,12 @@ function Home() {
                     }`}
                     alt={item.judul}
                     className="berita-card-image"
+                    // Fallback image jika broken
+                    onError={(e) => {
+                      e.target.src = `${
+                        import.meta.env.VITE_API_URL
+                      }../uploads/images/default.jpg`;
+                    }}
                   />
                   <div className="berita-card-content">
                     <span className={`berita-card-kategori ${item.kategori}`}>
@@ -193,17 +232,20 @@ function Home() {
                 </div>
               ))
             ) : (
-              <p style={{ textAlign: "center" }}>Belum ada berita terbaru.</p>
+              <p style={{ textAlign: "center", width: "100%", color: "#777" }}>
+                Belum ada berita terbaru.
+              </p>
             )}
           </div>
-          <div style={{ textAlign: "center", marginTop: "30px" }}>
-            <Link to="/berita" className="prodi-card-link">
+
+          <div style={{ textAlign: "center" }}>
+            <Link to="/berita" className="btn-view-all">
               Lihat Semua Berita
             </Link>
           </div>
         </div>
-      </div>
-    </>
+      </section>
+    </div>
   );
 }
 
