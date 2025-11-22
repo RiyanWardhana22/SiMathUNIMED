@@ -1,0 +1,185 @@
+/* Container Utama */
+.akademik-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 80vh;
+}
+
+/* Header Section */
+.akademik-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.akademik-header h2 {
+  font-size: 2.5rem;
+  color: #004a8d;
+  margin-bottom: 10px;
+}
+
+.akademik-header p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Search Bar */
+.search-box {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto 30px auto;
+}
+
+.search-input {
+  width: 100%;
+  padding: 15px 20px 15px 50px;
+  border: 2px solid #e0e0e0;
+  border-radius: 50px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: #004a8d;
+  box-shadow: 0 0 8px rgba(0, 74, 141, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 1.2rem;
+}
+
+/* Tabs Navigation */
+.tabs-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #fff;
+  color: #555;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 1px solid #e0e0e0;
+}
+
+.tab-button:hover {
+  background-color: #f0f0f0;
+}
+
+.tab-button.active {
+  background-color: #004a8d;
+  color: #fff;
+  border-color: #004a8d;
+  box-shadow: 0 4px 10px rgba(0, 74, 141, 0.2);
+}
+
+/* Grid Layout untuk Dokumen */
+.doc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+/* Kartu Dokumen */
+.doc-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.doc-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  border-color: #e0e0e0;
+}
+
+.doc-icon-wrapper {
+  width: 50px;
+  height: 50px;
+  background-color: #eef4fa;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #004a8d;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.doc-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+  line-height: 1.4;
+  flex-grow: 1;
+}
+
+.doc-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed #eee;
+}
+
+.prodi-badge {
+  background-color: #f5f5f5;
+  color: #666;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.download-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  color: #004a8d;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+
+.download-link:hover {
+  color: #002244;
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .akademik-header h2 {
+    font-size: 2rem;
+  }
+  .tabs-container {
+    gap: 8px;
+  }
+  .tab-button {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+  }
+}
