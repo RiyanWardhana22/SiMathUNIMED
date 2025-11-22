@@ -3,8 +3,6 @@ include 'auth_guard.php';
 include 'db_config.php';
 
 $response = array();
-
-// 2. Cek Peran
 $role = $authUser['role'];
 if ($role != 'superadmin' && $role != 'admin_jurusan') {
             http_response_code(403);
@@ -14,7 +12,6 @@ if ($role != 'superadmin' && $role != 'admin_jurusan') {
             die();
 }
 
-// 3. Validasi Input
 if (
             !isset($_POST['nama_dosen']) ||
             !isset($_POST['nip']) ||
@@ -33,10 +30,8 @@ $id_prodi = intval($_POST['id_prodi']);
 $bidang_keahlian = $_POST['bidang_keahlian'] ?? '';
 $link_google_scholar = $_POST['link_google_scholar'] ?? '';
 
-// Default foto
 $foto_profil_name = 'default.jpg';
 
-// 4. Proses Upload Foto (Opsional)
 if (isset($_FILES['foto_profil']) && $_FILES['foto_profil']['error'] == UPLOAD_ERR_OK) {
             $file = $_FILES['foto_profil'];
             $file_name_original = $file['name'];
@@ -44,13 +39,11 @@ if (isset($_FILES['foto_profil']) && $_FILES['foto_profil']['error'] == UPLOAD_E
             $allowed_ext = ['jpg', 'jpeg', 'png', 'gif'];
 
             if (in_array($file_ext, $allowed_ext)) {
-                        // Buat nama unik menggunakan NIP dan timestamp
                         $foto_profil_name = $nip . '-' . time() . '.' . $file_ext;
                         $target_dir = __DIR__ . '/../uploads/images/';
                         $target_file = $target_dir . $foto_profil_name;
 
                         if (!move_uploaded_file($file['tmp_name'], $target_file)) {
-                                    // Jika gagal upload, kembalikan error
                                     http_response_code(500);
                                     $response['status'] = 'error';
                                     $response['message'] = 'Gagal meng-upload foto.';
@@ -66,7 +59,6 @@ if (isset($_FILES['foto_profil']) && $_FILES['foto_profil']['error'] == UPLOAD_E
             }
 }
 
-// 5. Insert ke Database
 $stmt = $conn->prepare("INSERT INTO dosen (nama_dosen, nip, id_prodi, bidang_keahlian, link_google_scholar, foto_profil) VALUES (?, ?, ?, ?, ?, ?)");
 $stmt->bind_param("ssisss", $nama_dosen, $nip, $id_prodi, $bidang_keahlian, $link_google_scholar, $foto_profil_name);
 
@@ -76,7 +68,6 @@ if ($stmt->execute()) {
 } else {
             http_response_code(500);
             $response['status'] = 'error';
-            // Cek jika errornya karena NIP duplikat
             if ($conn->errno == 1062) {
                         $response['message'] = 'NIP sudah terdaftar.';
             } else {

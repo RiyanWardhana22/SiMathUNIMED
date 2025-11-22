@@ -114,8 +114,30 @@ function DosenDetail() {
             </div>
 
             <div className="profile-section">
-              <h3>Jadwal Konsultasi</h3>
-              <p>{dosen.jadwal_konsultasi || "Belum diatur"}</p>
+              <h3>Riwayat Pendidikan</h3>
+              {dosen.pendidikan && dosen.pendidikan.length > 0 ? (
+                <ul style={{ listStyle: "none", padding: 0 }}>
+                  {dosen.pendidikan.map((edu) => (
+                    <li
+                      key={edu.id_pendidikan}
+                      style={{
+                        marginBottom: "15px",
+                        paddingBottom: "10px",
+                        borderBottom: "1px dashed #eee",
+                      }}
+                    >
+                      <div style={{ fontWeight: "bold", color: "#333" }}>
+                        {edu.jenjang} - {edu.jurusan}
+                      </div>
+                      <div style={{ color: "#666", fontSize: "0.95rem" }}>
+                        {edu.universitas} ({edu.tahun_lulus})
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>-</p>
+              )}
             </div>
           </div>
         </div>
