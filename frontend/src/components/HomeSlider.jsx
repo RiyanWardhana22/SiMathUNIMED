@@ -1,7 +1,7 @@
 import React from "react";
 import Slider from "react-slick";
 import { Link } from "react-router-dom";
-import "../styles/HomeSlider.css"; // Kita akan buat file CSS ini
+import "../styles/HomeSlider.css";
 
 function HomeSlider({ slides }) {
   const settings = {
@@ -11,7 +11,7 @@ function HomeSlider({ slides }) {
     slidesToShow: 1, // Tampilkan 1 slide sekaligus
     slidesToScroll: 1,
     autoplay: true, // Putar otomatis
-    autoplaySpeed: 4000, // Pindah setiap 4 detik
+    autoplaySpeed: 3000, // Pindah setiap 4 detik
   };
 
   return (
@@ -19,9 +19,6 @@ function HomeSlider({ slides }) {
       <Slider {...settings}>
         {slides.map((slide) => (
           <div key={slide.id_slider} className="slide-item">
-            {/* Kita gunakan 'Link' jika link-nya internal (misal /berita/slug)
-              dan 'a' jika link-nya eksternal (misal http://google.com)
-            */}
             {slide.link_url && slide.link_url.startsWith("/") ? (
               <Link to={slide.link_url}>
                 <img

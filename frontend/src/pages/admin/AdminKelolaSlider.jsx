@@ -1,27 +1,28 @@
 import { useState, useEffect } from "react";
-import api from "../../api"; // Interceptor kita
-import "../../styles/Login.css"; // CSS Form
-import "../../styles/AdminTable.css"; // CSS Tabel
+import api from "../../api";
+import {
+  FaTrash,
+  FaUpload,
+  FaImage,
+  FaLink,
+  FaSortNumericDown,
+} from "react-icons/fa";
+import "../../styles/AdminTable.css";
 
 function AdminKelolaSlider() {
-  // State untuk daftar slider di tabel
   const [sliderList, setSliderList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  // State untuk form upload
   const [judul, setJudul] = useState("");
-  const [deskripsi, setDeskripsi] = useState("");
   const [linkUrl, setLinkUrl] = useState("");
-  const [urutan, setUrutan] = useState(10);
+  const [urutan, setUrutan] = useState(1);
   const [file, setFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
-  // State untuk status form
   const [uploading, setUploading] = useState(false);
-  const [formError, setFormError] = useState(null);
-  const [formSuccess, setFormSuccess] = useState(null);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
-  // Fungsi untuk mengambil semua data (slider)
   const fetchSliders = async () => {
     setLoading(true);
     try {
@@ -32,31 +33,36 @@ function AdminKelolaSlider() {
         setSliderList([]);
       }
     } catch (err) {
-      setError(err.message || "Gagal mengambil data");
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  // Ambil data saat komponen dimuat
   useEffect(() => {
     fetchSliders();
   }, []);
 
-  // Handler untuk form upload
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setPreviewUrl(URL.createObjectURL(selectedFile));
+    }
+  };
+
   const handleUpload = async (e) => {
     e.preventDefault();
     if (!file || !judul) {
-      setFormError("Judul dan File Gambar wajib diisi.");
+      alert("Judul dan Gambar wajib diisi.");
       return;
     }
     setUploading(true);
-    setFormError(null);
-    setFormSuccess(null);
+    setError(null);
+    setSuccess(null);
 
     const formData = new FormData();
     formData.append("judul", judul);
-    formData.append("deskripsi_singkat", deskripsi);
     formData.append("link_url", linkUrl);
     formData.append("urutan", urutan);
     formData.append("gambar_file", file);
@@ -64,191 +70,348 @@ function AdminKelolaSlider() {
     try {
       const response = await api.post("/upload_slider.php", formData);
       if (response.data.status === "success") {
-        setFormSuccess("Slider berhasil di-upload!");
-        // Reset form
+        setSuccess("Slider berhasil ditambahkan!");
         setJudul("");
-        setDeskripsi("");
         setLinkUrl("");
-        setUrutan(10);
+        setUrutan(1);
         setFile(null);
-        e.target.reset(); // Reset file input
-        // Refresh daftar slider
+        setPreviewUrl(null);
+        e.target.reset();
         fetchSliders();
       } else {
-        setFormError(response.data.message);
+        setError(response.data.message);
       }
     } catch (err) {
-      setFormError(err.response?.data?.message || "Terjadi kesalahan server.");
+      setError(err.response?.data?.message || "Gagal upload.");
     } finally {
       setUploading(false);
     }
   };
 
-  // Handler untuk delete
   const handleDelete = async (id, gambarPath) => {
-    if (
-      !window.confirm(
-        "Yakin ingin menghapus slider ini? File gambar akan dihapus permanen."
-      )
-    ) {
-      return;
-    }
+    if (!window.confirm("Hapus slider ini?")) return;
     try {
-      const response = await api.post("/delete_slider.php", {
-        id: id,
+      const res = await api.post("/delete_slider.php", {
+        id,
         gambar_path: gambarPath,
       });
-      if (response.data.status === "success") {
-        alert("Slider berhasil dihapus.");
-        // Refresh daftar
+      if (res.data.status === "success") {
         fetchSliders();
       } else {
-        alert("Gagal menghapus: " + response.data.message);
+        alert("Gagal hapus: " + res.data.message);
       }
     } catch (err) {
-      alert("Error: " + (err.response?.data?.message || err.message));
+      alert("Error koneksi.");
     }
   };
 
   return (
     <div className="container">
-      {/* BAGIAN 1: FORM UPLOAD */}
-      <h2>Upload Slider Baru</h2>
-      <form
-        className="login-form"
-        onSubmit={handleUpload}
-        style={{ maxWidth: "800px", marginBottom: "40px" }}
+      <h2
+        style={{
+          marginBottom: "20px",
+          borderBottom: "2px solid #f0ad4e",
+          paddingBottom: "10px",
+          display: "inline-block",
+        }}
       >
-        <div className="form-group">
-          <label htmlFor="judul">Judul Slider</label>
-          <input
-            type="text"
-            id="judul"
-            value={judul}
-            onChange={(e) => setJudul(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="deskripsi">Deskripsi Singkat (Opsional)</label>
-          <input
-            type="text"
-            id="deskripsi"
-            value={deskripsi}
-            onChange={(e) => setDeskripsi(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="link_url">
-            Link Tujuan (Opsional, misal: /berita/seminar)
-          </label>
-          <input
-            type="text"
-            id="link_url"
-            value={linkUrl}
-            onChange={(e) => setLinkUrl(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="urutan">Urutan (Angka kecil tampil dulu)</label>
-          <input
-            type="number"
-            id="urutan"
-            value={urutan}
-            onChange={(e) => setUrutan(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "12px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-            }}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="gambar_file">Pilih Gambar Banner (Wajib)</label>
-          <input
-            type="file"
-            id="gambar_file"
-            onChange={(e) => setFile(e.target.files[0])}
-            required
-            className="file-input"
-            accept="image/*"
-          />
-        </div>
+        Kelola Slider Beranda
+      </h2>
 
-        {formError && <div className="error-message">{formError}</div>}
-        {formSuccess && (
-          <div className="success-message">
-            {" "}
-            {/* Pastikan class ini ada di CSS Anda */}
-            {formSuccess}
-          </div>
-        )}
+      <div
+        className="admin-slider-layout"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1.5fr",
+          gap: "30px",
+          alignItems: "start",
+        }}
+      >
+        {/* --- KOLOM KIRI: FORM UPLOAD --- */}
+        <div
+          className="form-card"
+          style={{
+            background: "#fff",
+            padding: "25px",
+            borderRadius: "8px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          }}
+        >
+          <h3 style={{ marginTop: 0, color: "#004a8d" }}>
+            + Tambah Banner Baru
+          </h3>
 
-        <button type="submit" className="login-button" disabled={uploading}>
-          {uploading ? "Mengupload..." : "Upload Slider"}
-        </button>
-      </form>
+          <form onSubmit={handleUpload}>
+            {/* Preview Image Box */}
+            <div
+              style={{
+                width: "100%",
+                height: "180px",
+                background: "#f4f4f4",
+                border: "2px dashed #ccc",
+                borderRadius: "6px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: "20px",
+                overflow: "hidden",
+                position: "relative",
+              }}
+            >
+              {previewUrl ? (
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              ) : (
+                <span style={{ color: "#aaa" }}>
+                  <FaImage size={40} /> <br /> Preview Gambar
+                </span>
+              )}
+              <input
+                type="file"
+                onChange={handleFileChange}
+                accept="image/*"
+                required
+                style={{
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%",
+                  opacity: 0,
+                  cursor: "pointer",
+                }}
+              />
+            </div>
 
-      {/* BAGIAN 2: TABEL SLIDER */}
-      <h2>Daftar Slider Aktif</h2>
-      {loading ? (
-        <p>Loading daftar slider...</p>
-      ) : error ? (
-        <p style={{ color: "red" }}>{error}</p>
-      ) : (
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Gambar</th>
-              <th>Judul</th>
-              <th>Link</th>
-              <th>Urutan</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sliderList.length > 0 ? (
-              sliderList.map((slider) => (
-                <tr key={slider.id_slider}>
-                  <td>
-                    <img
-                      src={`${import.meta.env.VITE_API_URL}../uploads/images/${
-                        slider.gambar_path
-                      }`}
-                      alt={slider.judul}
-                      style={{
-                        width: "100px",
-                        height: "auto",
-                        borderRadius: "4px",
-                      }}
-                    />
-                  </td>
-                  <td>{slider.judul}</td>
-                  <td>{slider.link_url}</td>
-                  <td>{slider.urutan}</td>
-                  <td>
-                    <button
-                      onClick={() =>
-                        handleDelete(slider.id_slider, slider.gambar_path)
-                      }
-                      className="btn-hapus"
-                    >
-                      Hapus
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5" style={{ textAlign: "center" }}>
-                  Belum ada slider yang di-upload.
-                </td>
-              </tr>
+            <div className="form-group">
+              <label style={{ fontWeight: "bold" }}>Judul Banner</label>
+              <input
+                type="text"
+                value={judul}
+                onChange={(e) => setJudul(e.target.value)}
+                placeholder="Contoh: Seminar Nasional"
+                required
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                }}
+              />
+            </div>
+
+            <div className="form-group">
+              <label style={{ fontWeight: "bold" }}>
+                <FaLink /> Link Tujuan (Opsional)
+              </label>
+              <input
+                type="text"
+                value={linkUrl}
+                onChange={(e) => setLinkUrl(e.target.value)}
+                placeholder="/berita/judul-berita"
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                }}
+              />
+            </div>
+
+            <div className="form-group">
+              <label style={{ fontWeight: "bold" }}>
+                <FaSortNumericDown /> Urutan Tampil
+              </label>
+              <input
+                type="number"
+                value={urutan}
+                onChange={(e) => setUrutan(e.target.value)}
+                min="1"
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                }}
+              />
+              <small style={{ color: "#777" }}>
+                *Angka 1 akan tampil paling awal.
+              </small>
+            </div>
+
+            {error && (
+              <div
+                style={{
+                  color: "red",
+                  background: "#ffe6e6",
+                  padding: "10px",
+                  borderRadius: "4px",
+                  marginBottom: "10px",
+                }}
+              >
+                {error}
+              </div>
             )}
-          </tbody>
-        </table>
-      )}
+            {success && (
+              <div
+                style={{
+                  color: "green",
+                  background: "#e6fffa",
+                  padding: "10px",
+                  borderRadius: "4px",
+                  marginBottom: "10px",
+                }}
+              >
+                {success}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={uploading}
+              style={{
+                width: "100%",
+                padding: "12px",
+                background: "#004a8d",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                fontWeight: "bold",
+                cursor: uploading ? "not-allowed" : "pointer",
+              }}
+            >
+              {uploading ? (
+                "Mengupload..."
+              ) : (
+                <>
+                  <FaUpload /> Upload Slider
+                </>
+              )}
+            </button>
+          </form>
+        </div>
+
+        {/* --- KOLOM KANAN: DAFTAR SLIDER --- */}
+        <div
+          className="list-card"
+          style={{
+            background: "#fff",
+            padding: "25px",
+            borderRadius: "8px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          }}
+        >
+          <h3 style={{ marginTop: 0, color: "#333" }}>Daftar Slider Aktif</h3>
+
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <div style={{ overflowX: "auto" }}>
+              {" "}
+              <table
+                className="admin-table"
+                style={{ width: "100%", minWidth: "500px" }}
+              >
+                <thead>
+                  <tr style={{ background: "#f7f7f7", textAlign: "left" }}>
+                    <th style={{ padding: "10px" }}>Urutan</th>
+                    <th style={{ padding: "10px" }}>Gambar</th>
+                    <th style={{ padding: "10px" }}>Judul</th>
+                    <th style={{ padding: "10px", textAlign: "center" }}>
+                      Aksi
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sliderList.length > 0 ? (
+                    sliderList.map((slider) => (
+                      <tr
+                        key={slider.id_slider}
+                        style={{ borderBottom: "1px solid #eee" }}
+                      >
+                        <td
+                          style={{
+                            padding: "10px",
+                            textAlign: "center",
+                          }}
+                        >
+                          {slider.urutan}
+                        </td>
+                        <td style={{ padding: "10px" }}>
+                          <img
+                            src={`${
+                              import.meta.env.VITE_API_URL
+                            }../uploads/images/${slider.gambar_path}`}
+                            alt="Thumbnail"
+                            style={{
+                              width: "120px",
+                              height: "60px",
+                              objectFit: "cover",
+                              borderRadius: "4px",
+                              border: "1px solid #eee",
+                            }}
+                          />
+                        </td>
+                        <td style={{ padding: "10px" }}>
+                          <strong
+                            style={{ display: "block", fontSize: "1rem" }}
+                          >
+                            {slider.judul}
+                          </strong>
+                          <span style={{ fontSize: "0.85rem", color: "#666" }}>
+                            Link: {slider.link_url || "-"}
+                          </span>
+                        </td>
+                        <td style={{ padding: "10px", textAlign: "center" }}>
+                          <button
+                            onClick={() =>
+                              handleDelete(slider.id_slider, slider.gambar_path)
+                            }
+                            style={{
+                              background: "#d9534f",
+                              color: "white",
+                              border: "none",
+                              padding: "8px 12px",
+                              borderRadius: "4px",
+                              cursor: "pointer",
+                            }}
+                            title="Hapus Slider"
+                          >
+                            <FaTrash />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="4"
+                        style={{
+                          textAlign: "center",
+                          padding: "20px",
+                          color: "#777",
+                        }}
+                      >
+                        Belum ada slider. Silakan upload di form sebelah kiri.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* CSS Khusus untuk Mobile Responsiveness halaman ini */}
+      <style>{`
+        @media (max-width: 900px) {
+          .admin-slider-layout {
+            grid-template-columns: 1fr !important; /* Stack ke bawah di HP */
+          }
+        }
+      `}</style>
     </div>
   );
 }

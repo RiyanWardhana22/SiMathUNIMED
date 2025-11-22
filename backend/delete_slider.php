@@ -3,8 +3,6 @@ include 'auth_guard.php';
 include 'db_config.php';
 
 $response = array();
-
-// 3. Cek Peran (Hanya admin)
 $role = $authUser['role'];
 if ($role != 'superadmin' && $role != 'admin_jurusan') {
             http_response_code(403);
@@ -13,14 +11,10 @@ if ($role != 'superadmin' && $role != 'admin_jurusan') {
             die(json_encode($response));
 }
 
-// 4. Ambil data JSON (kita butuh ID dan gambar_path)
 $data = json_decode(file_get_contents("php://input"));
-
 if (isset($data->id) && isset($data->gambar_path)) {
             $id_slider = intval($data->id);
             $gambar_path = $data->gambar_path;
-
-            // 5. Hapus file fisik dari server
             $target_file = __DIR__ . '/../uploads/images/' . basename($gambar_path);
 
             $file_deleted = false;
@@ -29,14 +23,12 @@ if (isset($data->id) && isset($data->gambar_path)) {
                                     $file_deleted = true;
                         }
             } else {
-                        $file_deleted = true; // Anggap sukses agar bisa lanjut hapus DB
+                        $file_deleted = true;
             }
 
             if ($file_deleted) {
-                        // 6. Hapus data dari Database
                         $stmt = $conn->prepare("DELETE FROM sliders WHERE id_slider = ?");
                         $stmt->bind_param("i", $id_slider);
-
                         if ($stmt->execute()) {
                                     $response['status'] = 'success';
                                     $response['message'] = 'Slider berhasil dihapus.';
