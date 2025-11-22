@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../api";
-import "../styles/AdminTable.css";
-import "../styles/Berita.css";
-import "../styles/Profil.css";
+import "../styles/ProdiDetail.css";
+import { FaAward, FaUniversity } from "react-icons/fa";
 
 function ProdiDetail() {
   const { id } = useParams();
@@ -32,149 +31,176 @@ function ProdiDetail() {
     fetchProdiDetail();
   }, [id]);
 
-  if (loading) {
+  if (loading)
     return (
-      <div className="container">
-        <p>Loading detail program studi...</p>
+      <div
+        className="container"
+        style={{ textAlign: "center", padding: "50px" }}
+      >
+        <p>Loading...</p>
       </div>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
-      <div className="container" style={{ color: "red" }}>
+      <div
+        className="container"
+        style={{ color: "red", textAlign: "center", padding: "50px" }}
+      >
         <p>Error: {error}</p>
         <Link to="/">Kembali ke Beranda</Link>
       </div>
     );
-  }
 
   return (
-    <div className="container">
-      {data && data.profil ? (
-        <>
-          <h2>{data.profil.nama_prodi}</h2>
+    <div className="prodi-page-wrapper">
+      {/* 1. HERO SECTION */}
+      {data && data.profil && (
+        <div className="prodi-hero">
+          <div className="hero-content">
+            <span className="prodi-subtitle">
+              <FaUniversity
+                style={{ marginRight: "8px", verticalAlign: "middle" }}
+              />
+              Fakultas Matematika dan Ilmu Pengetahuan Alam
+            </span>
 
-          <div className="akreditasi-badge">
-            Akreditasi: {data.profil.akreditasi || "N/A"}
+            <h1>{data.profil.nama_prodi}</h1>
+
+            <div className="prodi-badge-hero">
+              <FaAward className="badge-icon" />
+              <span>
+                Akreditasi: {data.profil.akreditasi || "Belum Terakreditasi"}
+              </span>
+            </div>
           </div>
-
-          <h3 style={{ marginTop: "20px" }}>Deskripsi</h3>
-          <pre className="profil-content">
-            {data.profil.deskripsi || "Belum ada data."}
-          </pre>
-
-          <h3>Visi</h3>
-          <pre className="profil-content">
-            {data.profil.visi || "Belum ada data."}
-          </pre>
-
-          <h3>Misi</h3>
-          <pre className="profil-content">
-            {data.profil.misi || "Belum ada data."}
-          </pre>
-
-          <h3>Profil Lulusan & Prospek Kerja</h3>
-          <pre className="profil-content">
-            {data.profil.profil_lulusan || "Belum ada data."}
-          </pre>
-
-          {/* Bagian 2: Daftar Dosen Pengajar */}
-          <h3
-            style={{
-              marginTop: "30px",
-              borderTop: "1px solid #eee",
-              paddingTop: "20px",
-            }}
-          >
-            Dosen Pengajar
-          </h3>
-          <div className="dosen-list-prodi">
-            {data.dosen && data.dosen.length > 0 ? (
-              data.dosen.map((dosen) => (
-                <div key={dosen.id_dosen} className="dosen-card">
-                  <img
-                    src={`${import.meta.env.VITE_API_URL}../uploads/images/${
-                      dosen.foto_profil
-                    }`}
-                    alt={dosen.nama_dosen}
-                    className="dosen-card-foto"
-                  />
-                  <div className="dosen-card-info">
-                    <Link
-                      to={`/dosen/${dosen.id_dosen}`}
-                      className="dosen-card-nama"
-                    >
-                      {dosen.nama_dosen}
-                    </Link>
-                    <span className="dosen-card-keahlian">
-                      {dosen.bidang_keahlian}
-                    </span>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p>Belum ada data dosen untuk program studi ini.</p>
-            )}
-          </div>
-
-          {/* Bagian 3: Dokumen Terkait (Kurikulum, dll) */}
-          <h3
-            style={{
-              marginTop: "30px",
-              borderTop: "1px solid #eee",
-              paddingTop: "20px",
-            }}
-          >
-            Dokumen Program Studi
-          </h3>
-          {data.dokumen && data.dokumen.length > 0 ? (
-            <table className="admin-table" style={{ maxWidth: "600px" }}>
-              <thead>
-                <tr>
-                  <th>Nama Dokumen</th>
-                  <th>Kategori</th>
-                  <th>Link</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.dokumen.map((doc) => (
-                  <tr key={doc.id_dokumen}>
-                    <td>{doc.nama_dokumen}</td>
-                    <td>
-                      <span
-                        style={{ color: "#000000" }}
-                        className={`kategori-badge ${doc.kategori}`}
-                      >
-                        {doc.kategori}
-                      </span>
-                    </td>
-                    <td>
-                      <a
-                        href={`${
-                          import.meta.env.VITE_API_URL
-                        }../uploads/documents/${doc.file_path}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-edit"
-                      >
-                        Download
-                      </a>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p>Belum ada dokumen yang terkait dengan program studi ini.</p>
-          )}
-
-          <br />
-          <Link to="/">Kembali ke Beranda</Link>
-        </>
-      ) : (
-        <p>Data prodi tidak ditemukan.</p>
+        </div>
       )}
+
+      <div className="container">
+        {data && data.profil ? (
+          <div className="prodi-layout">
+            {/* 2. KOLOM UTAMA (KIRI) - Konten Teks */}
+            <div className="prodi-main-content">
+              <div className="prodi-main-section">
+                <h3 className="prodi-section-title">Deskripsi Program Studi</h3>
+                <div
+                  className="prodi-text-content"
+                  dangerouslySetInnerHTML={{
+                    __html: data.profil.deskripsi || "<p>Belum ada data.</p>",
+                  }}
+                />
+              </div>
+
+              <div className="prodi-main-section">
+                <h3 className="prodi-section-title">Visi</h3>
+                <div
+                  className="prodi-text-content"
+                  dangerouslySetInnerHTML={{
+                    __html: data.profil.visi || "<p>Belum ada data.</p>",
+                  }}
+                />
+              </div>
+
+              <div className="prodi-main-section">
+                <h3 className="prodi-section-title">Misi</h3>
+                <div
+                  className="prodi-text-content"
+                  dangerouslySetInnerHTML={{
+                    __html: data.profil.misi || "<p>Belum ada data.</p>",
+                  }}
+                />
+              </div>
+
+              <div className="prodi-main-section">
+                <h3 className="prodi-section-title">
+                  Profil Lulusan & Prospek Kerja
+                </h3>
+                <div
+                  className="prodi-text-content"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      data.profil.profil_lulusan || "<p>Belum ada data.</p>",
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* 3. SIDEBAR (KANAN) - Dosen & Dokumen */}
+            <div className="prodi-sidebar">
+              <div className="prodi-sidebar-card">
+                <h4 className="sidebar-title">Dosen Pengajar</h4>
+                {data.dosen && data.dosen.length > 0 ? (
+                  <div className="mini-dosen-list">
+                    {data.dosen.map((dosen) => (
+                      <div key={dosen.id_dosen} className="mini-dosen-item">
+                        <img
+                          src={`${
+                            import.meta.env.VITE_API_URL
+                          }../uploads/images/${dosen.foto_profil}`}
+                          alt={dosen.nama_dosen}
+                          className="mini-dosen-img"
+                          onError={(e) => {
+                            e.target.src = `${
+                              import.meta.env.VITE_API_URL
+                            }../uploads/images/default.jpg`;
+                          }}
+                        />
+                        <div className="mini-dosen-info">
+                          <h4>
+                            <Link to={`/dosen/${dosen.id_dosen}`}>
+                              {dosen.nama_dosen}
+                            </Link>
+                          </h4>
+                          <span className="mini-dosen-skill">
+                            {dosen.bidang_keahlian || "Dosen Prodi"}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p style={{ color: "#777", fontSize: "0.9rem" }}>
+                    Belum ada data dosen.
+                  </p>
+                )}
+              </div>
+
+              {/* Widget Dokumen */}
+              <div className="prodi-sidebar-card">
+                <h4 className="sidebar-title">Dokumen Akademik</h4>
+                {data.dokumen && data.dokumen.length > 0 ? (
+                  <div className="mini-doc-list">
+                    {data.dokumen.map((doc) => (
+                      <div key={doc.id_dokumen} className="mini-doc-item">
+                        <span className="mini-doc-name">
+                          {doc.nama_dokumen}
+                        </span>
+                        <a
+                          href={`${
+                            import.meta.env.VITE_API_URL
+                          }../uploads/documents/${doc.file_path}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mini-doc-dl"
+                        >
+                          Download
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p style={{ color: "#777", fontSize: "0.9rem" }}>
+                    Belum ada dokumen.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <p>Data prodi tidak ditemukan.</p>
+        )}
+      </div>
     </div>
   );
 }
