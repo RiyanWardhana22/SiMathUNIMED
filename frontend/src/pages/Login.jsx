@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "../styles/Login.css";
 import { AuthContext } from "../context/AuthContext";
 
@@ -66,8 +66,18 @@ function Login() {
             required
           />
         </div>
-
-        {/* Tampilkan pesan error jika ada */}
+        <div style={{ textAlign: "right", marginBottom: "15px" }}>
+          <Link
+            to="/forgot-password"
+            style={{
+              fontSize: "0.9rem",
+              color: "#004a8d",
+              textDecoration: "none",
+            }}
+          >
+            Lupa Password?
+          </Link>
+        </div>
         {error && <div className="error-message">{error}</div>}
 
         <button type="submit" className="login-button" disabled={loading}>

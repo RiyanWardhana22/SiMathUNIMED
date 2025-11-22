@@ -23,6 +23,8 @@ import AdminEditProdi from "./pages/admin/AdminEditProdi";
 import AdminKelolaSlider from "./pages/admin/AdminKelolaSlider";
 import Akademik from "./pages/Akademik";
 import AdminTambahDosen from "./pages/admin/AdminTambahDosen";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function App() {
           <Route path="berita" element={<Berita />} />
           <Route path="berita/:slug" element={<BeritaDetail />} />
           <Route path="login" element={<Login />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="reset-password" element={<ResetPassword />} />
           <Route path="akademik" element={<Akademik />} />
         </Route>
 
