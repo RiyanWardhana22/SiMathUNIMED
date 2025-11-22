@@ -25,6 +25,8 @@ import Akademik from "./pages/Akademik";
 import AdminTambahDosen from "./pages/admin/AdminTambahDosen";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import AdminKelolaUsers from "./pages/admin/AdminKelolaUsers";
+import AdminTambahUser from "./pages/admin/AdminTambahUser";
 
 function App() {
   return (
@@ -66,6 +68,8 @@ function App() {
             <Route path="/admin/prodi/edit/:id" element={<AdminEditProdi />} />
             <Route path="/admin/slider" element={<AdminKelolaSlider />} />
             <Route path="/admin/pengaturan" element={<AdminPengaturan />} />
+            <Route path="/admin/users" element={<AdminKelolaUsers />} />
+            <Route path="/admin/users/tambah" element={<AdminTambahUser />} />
           </Route>
         </Route>
       </Routes>

@@ -4,6 +4,9 @@ import { AuthContext } from "../../context/AuthContext";
 import api from "../../api";
 import "../../styles/Dashboard.css";
 import "../../styles/AdminTable.css";
+import { MdDashboard } from "react-icons/md";
+import { IoFileTrayStackedSharp } from "react-icons/io5";
+import { FaUserCog } from "react-icons/fa";
 
 import {
   FaNewspaper,
@@ -14,8 +17,6 @@ import {
   FaPlusCircle,
   FaBeer,
 } from "react-icons/fa";
-import { MdDashboard } from "react-icons/md";
-import { IoFileTrayStackedSharp } from "react-icons/io5";
 
 function Dashboard() {
   const { authUser } = useContext(AuthContext);
@@ -154,6 +155,12 @@ function Dashboard() {
             <IoFileTrayStackedSharp />
           </div>
           <span className="action-title">Pengaturan Prodi</span>
+        </Link>
+        <Link to="/admin/users" className="action-card">
+          <div className="action-icon">
+            <FaUserCog />
+          </div>
+          <span className="action-title">Manajemen User</span>
         </Link>
         <Link to="/admin/pengaturan" className="action-card">
           <div className="action-icon">
