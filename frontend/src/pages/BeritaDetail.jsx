@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import "../styles/Berita.css";
+import "../styles/BeritaDetail.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -46,60 +46,68 @@ function BeritaDetail() {
     return new Date(dateString).toLocaleDateString("id-ID", options);
   };
 
-  if (loading) {
+  if (loading)
     return (
-      <div className="container">
-        <p>Loading postingan...</p>
+      <div
+        className="container"
+        style={{ textAlign: "center", padding: "50px" }}
+      >
+        <div className="loader"></div> Loading...
       </div>
     );
-  }
-  if (error) {
+
+  if (error)
     return (
-      <div className="container" style={{ color: "red" }}>
-        <p>Error: {error}</p>
-        <Link to="/berita">Kembali ke Daftar Berita</Link>
+      <div
+        className="container"
+        style={{ textAlign: "center", padding: "50px", color: "red" }}
+      >
+        <h3>Error</h3>
+        <p>{error}</p>
+        <Link to="/berita" className="btn-back">
+          &larr; Kembali ke Berita
+        </Link>
       </div>
     );
-  }
 
   return (
-    <div className="container">
-      {post ? (
-        <div className="berita-detail-content">
-          <h2>{post.judul}</h2>
-
-          <div className="berita-card-meta" style={{ marginBottom: "20px" }}>
-            <span className={`berita-card-kategori ${post.kategori}`}>
+    <div className="berita-detail-wrapper">
+      <div className="berita-header">
+        <div className="container">
+          <h1>{post.judul}</h1>
+          <div className="meta-info">
+            <span className={`kategori-badge ${post.kategori}`}>
               {post.kategori}
             </span>
-            <br />
-            Dipublish pada {formatDate(post.tanggal_publish)}
-            {post.nama_penulis && ` oleh ${post.nama_penulis}`}
+            <span>📅 {formatDate(post.tanggal_publish)}</span>
+            <span>👤 {post.nama_penulis || "Admin"}</span>
           </div>
-
-          <img
-            src={API_URL + `../uploads/images/${post.gambar_header}`}
-            alt={post.judul}
-            className="berita-card-image"
-            style={{ marginBottom: "20px" }}
-          />
-
-          {/* Ini adalah tempat isi artikel lengkap ditampilkan */}
-          <div className="isi-berita">
-            <p>{post.isi_berita}</p>
-            {/* Nanti jika 'isi_berita' Anda adalah HTML, 
-              kita akan perlu mengubah <p>{post.isi_berita}</p> 
-              menjadi sesuatu yang bisa render HTML. 
-              Tapi untuk saat ini, ini sudah cukup.
-            */}
-          </div>
-
-          <br />
-          <Link to="/berita">Kembali ke Daftar Berita</Link>
         </div>
-      ) : (
-        <p>Postingan tidak ditemukan.</p>
-      )}
+      </div>
+
+      <div className="container berita-body-container">
+        {/* Gambar Header */}
+        {post.gambar_header && (
+          <div className="berita-featured-image">
+            <img
+              src={API_URL + `../uploads/images/${post.gambar_header}`}
+              alt={post.judul}
+            />
+          </div>
+        )}
+
+        {/* ISI BERITA (RENDER HTML) */}
+        <div
+          className="berita-content"
+          dangerouslySetInnerHTML={{ __html: post.isi_berita }}
+        />
+
+        <div className="berita-footer">
+          <Link to="/berita" className="btn-back">
+            &larr; Kembali ke Daftar Berita
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

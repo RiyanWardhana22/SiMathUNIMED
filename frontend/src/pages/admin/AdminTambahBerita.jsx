@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 import api from "../../api";
 import "../../styles/Login.css";
 
@@ -8,12 +10,30 @@ function AdminTambahBerita() {
   const [isiBerita, setIsiBerita] = useState("");
   const [kategori, setKategori] = useState("berita");
   const [gambarFile, setGambarFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
   const navigate = useNavigate();
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link"],
+      ["clean"],
+    ],
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setGambarFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,7 +41,8 @@ function AdminTambahBerita() {
     setError(null);
     setSuccess(null);
 
-    if (!judul || !isiBerita) {
+    const strippedContent = isiBerita.replace(/<[^>]+>/g, "");
+    if (!judul || !strippedContent.trim()) {
       setError("Judul dan Isi Berita tidak boleh kosong.");
       setLoading(false);
       return;
@@ -58,12 +79,21 @@ function AdminTambahBerita() {
 
   return (
     <div className="container">
-      <h2>Tambah Berita / Event Baru</h2>
+      <h2
+        style={{
+          marginBottom: "20px",
+          borderBottom: "2px solid #004a8d",
+          display: "inline-block",
+          paddingBottom: "5px",
+        }}
+      >
+        Tulis Berita Baru
+      </h2>
 
       <form
         className="login-form"
         onSubmit={handleSubmit}
-        style={{ maxWidth: "800px" }}
+        style={{ maxWidth: "900px" }}
       >
         <div className="form-group">
           <label htmlFor="judul">Judul Postingan</label>
@@ -73,66 +103,94 @@ function AdminTambahBerita() {
             value={judul}
             onChange={(e) => setJudul(e.target.value)}
             required
+            placeholder="Masukkan judul berita yang menarik..."
+            style={{ fontSize: "1.1rem", padding: "12px" }}
           />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="kategori">Kategori</label>
-          <select
-            id="kategori"
-            value={kategori}
-            onChange={(e) => setKategori(e.target.value)}
+        <div
+          className="form-row"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "20px",
+          }}
+        >
+          <div className="form-group">
+            <label htmlFor="kategori">Kategori</label>
+            <select
+              id="kategori"
+              value={kategori}
+              onChange={(e) => setKategori(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "12px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+              }}
+            >
+              <option value="berita">Berita Umum</option>
+              <option value="event">Agenda / Event</option>
+              <option value="pengumuman">Pengumuman Akademik</option>
+              <option value="prestasi">Prestasi Mahasiswa/Dosen</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="gambar">Gambar Header (Opsional)</label>
+            <input
+              type="file"
+              id="gambar"
+              onChange={handleFileChange}
+              style={{
+                width: "100%",
+                padding: "9px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                background: "#f9f9f9",
+              }}
+              accept="image/*"
+            />
+          </div>
+        </div>
+
+        {/* Preview Gambar */}
+        {previewUrl && (
+          <div
             style={{
-              width: "100%",
-              padding: "12px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              fontSize: "1rem",
+              marginBottom: "20px",
+              textAlign: "center",
+              background: "#eee",
+              padding: "10px",
+              borderRadius: "8px",
             }}
           >
-            <option value="berita">Berita</option>
-            <option value="event">Event</option>
-            <option value="pengumuman">Pengumuman</option>
-            <option value="prestasi">Prestasi</option>
-          </select>
-        </div>
+            <img
+              src={previewUrl}
+              alt="Preview"
+              style={{
+                maxHeight: "200px",
+                maxWidth: "100%",
+                borderRadius: "4px",
+              }}
+            />
+          </div>
+        )}
 
         <div className="form-group">
-          <label htmlFor="gambar">Gambar Header (Opsional)</label>
-          <input
-            type="file"
-            id="gambar"
-            onChange={(e) => setGambarFile(e.target.files[0])}
-            style={{
-              width: "100%",
-              padding: "12px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-            }}
-            accept="image/*"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="isiBerita">Isi Berita</label>
-          <textarea
-            id="isiBerita"
-            value={isiBerita}
-            onChange={(e) => setIsiBerita(e.target.value)}
-            rows="10"
-            style={{
-              width: "100%",
-              padding: "12px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              fontSize: "1rem",
-            }}
-            required
-          />
+          <label>Isi Berita</label>
+          <div style={{ background: "#fff" }}>
+            <ReactQuill
+              theme="snow"
+              value={isiBerita}
+              onChange={setIsiBerita}
+              modules={modules}
+              style={{ height: "300px", marginBottom: "50px" }}
+            />
+          </div>
         </div>
 
         {error && <div className="error-message">{error}</div>}
-
         {success && (
           <div
             style={{
@@ -149,7 +207,12 @@ function AdminTambahBerita() {
           </div>
         )}
 
-        <button type="submit" className="login-button" disabled={loading}>
+        <button
+          type="submit"
+          className="login-button"
+          disabled={loading}
+          style={{ marginTop: "20px" }}
+        >
           {loading ? "Menyimpan..." : "Publish Postingan"}
         </button>
       </form>

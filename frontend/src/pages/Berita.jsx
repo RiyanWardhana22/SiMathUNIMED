@@ -52,7 +52,6 @@ function Berita() {
             <div className="berita-list">
               {postingan.data.map((item) => (
                 <div key={item.id_berita} className="berita-card">
-                  {/* Gambar (masih broken, tidak apa-apa) */}
                   <img
                     src={API_URL + `../uploads/images/${item.gambar_header}`}
                     alt={item.judul}
@@ -62,7 +61,6 @@ function Berita() {
                     <span className="berita-card-kategori">
                       {item.kategori}
                     </span>
-                    {/* Buat judul menjadi Link (menuju slug) */}
                     <Link
                       to={`/berita/${item.slug}`}
                       className="berita-card-judul"

@@ -1,0 +1,131 @@
+/* Wrapper Halaman Detail */
+.berita-detail-wrapper {
+  background-color: #fff;
+  padding-bottom: 50px;
+}
+
+/* Header Judul (Background tipis biar elegan) */
+.berita-header {
+  padding: 20px 0;
+  border-bottom: 1px solid #eaeaea;
+  text-align: center;
+}
+
+.berita-header h1 {
+  font-size: 2.5rem;
+  color: #333;
+  margin: 15px 0;
+  line-height: 1.2;
+}
+
+.meta-info {
+  color: #666;
+  font-size: 0.9rem;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* Container Body yang lebih sempit untuk readability */
+.berita-body-container {
+  max-width: 800px !important;
+  margin-top: -30px;
+}
+
+/* Gambar Featured */
+.berita-featured-image {
+  margin: 30px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.berita-featured-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Styling Konten Artikel (Typography) */
+.berita-content {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #2c3e50;
+  margin-bottom: 40px;
+}
+
+/* Styling elemen hasil ReactQuill */
+.berita-content p {
+  margin-bottom: 20px;
+}
+
+.berita-content h2 {
+  font-size: 1.8rem;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: #004a8d;
+}
+.berita-content h3 {
+  font-size: 1.5rem;
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.berita-content ul,
+.berita-content ol {
+  margin-bottom: 20px;
+  padding-left: 30px;
+}
+
+.berita-content li {
+  margin-bottom: 8px;
+}
+
+.berita-content blockquote {
+  border-left: 4px solid #004a8d;
+  padding-left: 20px;
+  font-style: italic;
+  color: #555;
+  background: #f9f9f9;
+  padding: 15px;
+  margin: 20px 0;
+}
+
+.berita-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+/* Tombol Kembali */
+.btn-back {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #fff;
+  border: 1px solid #004a8d;
+  color: #004a8d;
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.btn-back:hover {
+  background-color: #004a8d;
+  color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .berita-header h1 {
+    font-size: 1.8rem;
+  }
+  .meta-info {
+    flex-direction: column;
+    gap: 5px;
+  }
+  .berita-content {
+    font-size: 1rem;
+  }
+}
