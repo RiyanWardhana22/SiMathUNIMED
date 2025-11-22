@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../../api";
 import "../../styles/AdminTable.css";
+import { FaTrashAlt, FaPencilAlt } from "react-icons/fa";
 
 function AdminKelolaBerita() {
   const [postingan, setPostingan] = useState([]);
@@ -100,18 +101,18 @@ function AdminKelolaBerita() {
                   </span>
                 </td>
                 <td>{formatDate(item.tanggal_publish)}</td>
-                <td>
+                <td style={{ display: "flex" }}>
                   <Link
                     to={`/admin/berita/edit/${item.id_berita}`}
                     className="btn-edit"
                   >
-                    Edit
+                    <FaPencilAlt />
                   </Link>
                   <button
                     onClick={() => handleDelete(item.id_berita)}
                     className="btn-hapus"
                   >
-                    Hapus
+                    <FaTrashAlt />
                   </button>
                 </td>
               </tr>
