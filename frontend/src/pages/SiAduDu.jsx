@@ -3,7 +3,7 @@ import api from "../api";
 import "../styles/SiAduDu.css";
 import {
   FaSearch,
-  FaPaperPlane,
+  FaEnvelopeOpenText,
   FaCheckCircle,
   FaExclamationCircle,
   FaTicketAlt,
@@ -110,7 +110,7 @@ function SiAduDu() {
                 setTicketResult(null);
               }}
             >
-              <FaPaperPlane /> Buat Laporan
+              <FaEnvelopeOpenText /> Buat Laporan
             </button>
             <button
               className={`siadudu-tab ${activeTab === "cek" ? "active" : ""}`}
@@ -141,8 +141,8 @@ function SiAduDu() {
                       value={klasifikasi}
                       onChange={(e) => setKlasifikasi(e.target.value)}
                     >
-                      <option value="Pengaduan">Pengaduan (Keluhan)</option>
-                      <option value="Aspirasi">Aspirasi (Saran)</option>
+                      <option value="Pengaduan">Pengaduan</option>
+                      <option value="Aspirasi">Aspirasi</option>
                     </select>
                   </div>
                   <div>
@@ -169,7 +169,7 @@ function SiAduDu() {
                   <input
                     type="text"
                     className="siadudu-input"
-                    placeholder="Contoh: Proyektor di Ruang 301 Rusak"
+                    placeholder="Contoh: Tingkatkan layanan administrasi"
                     value={judul}
                     onChange={(e) => setJudul(e.target.value)}
                     required
@@ -351,12 +351,12 @@ function SiAduDu() {
                         }}
                       >
                         <span>
-                          📅{" "}
+                          Tanggal:{" "}
                           {new Date(
                             trackResult.tanggal_buat
                           ).toLocaleDateString()}
                         </span>
-                        <span>📂 {trackResult.kategori}</span>
+                        <span>Kategori: {trackResult.kategori}</span>
                       </div>
 
                       <p
