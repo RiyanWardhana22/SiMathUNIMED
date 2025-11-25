@@ -1,0 +1,228 @@
+.siadudu-wrapper {
+  background-color: #f4f7f6;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+.siadudu-hero {
+  background: linear-gradient(135deg, #004a8d 0%, #002a5c 100%);
+  color: #fff;
+  padding: 60px 20px 100px;
+  text-align: center;
+  border-radius: 0 0 50% 50% / 20px;
+}
+
+.siadudu-hero h1 {
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.siadudu-hero p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.siadudu-card-container {
+  max-width: 800px;
+  margin: -60px auto 0;
+  padding: 0 20px;
+  position: relative;
+  z-index: 10;
+}
+
+.siadudu-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  padding: 0;
+}
+
+/* --- TAB NAVIGATION --- */
+.siadudu-tabs {
+  display: flex;
+  background: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+.siadudu-tab {
+  flex: 1;
+  padding: 20px;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.siadudu-tab:hover {
+  background: #f1f1f1;
+  color: #004a8d;
+}
+
+.siadudu-tab.active {
+  background: #fff;
+  color: #004a8d;
+  border-bottom: 3px solid #004a8d;
+}
+
+.siadudu-form-area {
+  padding: 40px;
+}
+
+.form-section-title {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.siadudu-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border 0.3s, box-shadow 0.3s;
+  background-color: #fcfcfc;
+}
+
+.siadudu-input:focus {
+  border-color: #004a8d;
+  box-shadow: 0 0 0 3px rgba(0, 74, 141, 0.1);
+  outline: none;
+  background-color: #fff;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.file-input-wrapper {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border 0.3s;
+}
+
+.file-input-wrapper:hover {
+  border-color: #004a8d;
+  background-color: #f8fbff;
+}
+
+.ticket-success-card {
+  text-align: center;
+  padding: 20px;
+}
+
+.ticket-box {
+  background: #f0f9ff;
+  border: 2px dashed #004a8d;
+  color: #004a8d;
+  font-size: 2.5rem;
+  font-weight: 800;
+  padding: 20px;
+  margin: 30px 0;
+  border-radius: 12px;
+  letter-spacing: 2px;
+  position: relative;
+}
+
+.ticket-copy-hint {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 10px;
+}
+
+.track-result-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.track-header {
+  padding: 20px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-badge {
+  padding: 6px 15px;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.track-body {
+  padding: 25px;
+}
+
+.track-reply {
+  background: #eef4fa;
+  border-left: 4px solid #004a8d;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 0 8px 8px 0;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: #004a8d;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 20px;
+}
+
+.btn-submit:hover {
+  background: #003366;
+}
+
+.btn-submit:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .siadudu-hero h1 {
+    font-size: 2rem;
+  }
+  .siadudu-card-container {
+    margin-top: -40px;
+  }
+  .siadudu-form-area {
+    padding: 20px;
+  }
+  .ticket-box {
+    font-size: 1.8rem;
+  }
+}

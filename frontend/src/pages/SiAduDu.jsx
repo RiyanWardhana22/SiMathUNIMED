@@ -1,12 +1,13 @@
 import { useState } from "react";
 import api from "../api";
-import "../styles/Login.css";
+import "../styles/SiAduDu.css";
 import {
   FaSearch,
   FaPaperPlane,
-  FaTicketAlt,
   FaCheckCircle,
   FaExclamationCircle,
+  FaTicketAlt,
+  FaFileUpload,
 } from "react-icons/fa";
 
 function SiAduDu() {
@@ -16,9 +17,9 @@ function SiAduDu() {
   const [judul, setJudul] = useState("");
   const [isi, setIsi] = useState("");
   const [file, setFile] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [ticketResult, setTicketResult] = useState(null);
-
   const [searchTicket, setSearchTicket] = useState("");
   const [trackResult, setTrackResult] = useState(null);
   const [trackError, setTrackError] = useState(null);
@@ -33,6 +34,7 @@ function SiAduDu() {
     formData.append("judul", judul);
     formData.append("isi", isi);
     if (file) formData.append("lampiran", file);
+
     try {
       const res = await api.post("/create_pengaduan.php", formData);
       if (res.data.status === "success") {
@@ -63,10 +65,10 @@ function SiAduDu() {
       if (res.data.status === "success") {
         setTrackResult(res.data.data);
       } else {
-        setTrackError("Kode tiket tidak ditemukan.");
+        setTrackError("Kode tiket tidak ditemukan. Pastikan kode benar.");
       }
     } catch (err) {
-      setTrackError("Gagal koneksi.");
+      setTrackError("Gagal koneksi ke server.");
     } finally {
       setLoading(false);
     }
@@ -77,367 +79,352 @@ function SiAduDu() {
       case "Menunggu":
         return "#f0ad4e";
       case "Diproses":
-        return "#5bc0de";
+        return "#007bff";
       case "Selesai":
-        return "#5cb85c";
+        return "#28a745";
       case "Ditolak":
-        return "#d9534f";
+        return "#dc3545";
       default:
-        return "#777";
+        return "#6c757d";
     }
   };
 
   return (
-    <div
-      className="container"
-      style={{ padding: "40px 20px", maxWidth: "800px" }}
-    >
-      <div style={{ textAlign: "center", marginBottom: "40px" }}>
-        <h1 style={{ color: "#004a8d", fontWeight: "800", fontSize: "2.5rem" }}>
-          SiAduDu
-        </h1>
-        <p style={{ fontSize: "1.1rem", color: "#666" }}>
-          Sistem Pengaduan Terpadu - Identitas Anda Aman (Anonim)
+    <div className="siadudu-wrapper">
+      <div className="siadudu-hero">
+        <h1>SiAduDu</h1>
+        <p>
+          Sistem Pengaduan Terpadu - Suarakan aspirasi dan keluhan Anda secara
+          aman dan anonim.
         </p>
       </div>
 
-      {/* TAB NAVIGATION */}
-      <div
-        style={{
-          display: "flex",
-          gap: "10px",
-          marginBottom: "30px",
-          justifyContent: "center",
-        }}
-      >
-        <button
-          onClick={() => setActiveTab("buat")}
-          style={{
-            padding: "12px 30px",
-            borderRadius: "30px",
-            border: "none",
-            cursor: "pointer",
-            fontWeight: "bold",
-            background: activeTab === "buat" ? "#004a8d" : "#eee",
-            color: activeTab === "buat" ? "#fff" : "#555",
-          }}
-        >
-          <FaPaperPlane style={{ marginRight: "8px" }} /> Buat Laporan
-        </button>
-        <button
-          onClick={() => setActiveTab("cek")}
-          style={{
-            padding: "12px 30px",
-            borderRadius: "30px",
-            border: "none",
-            cursor: "pointer",
-            fontWeight: "bold",
-            background: activeTab === "cek" ? "#004a8d" : "#eee",
-            color: activeTab === "cek" ? "#fff" : "#555",
-          }}
-        >
-          <FaSearch style={{ marginRight: "8px" }} /> Cek Status
-        </button>
-      </div>
-
-      {/* --- TAB 1: BUAT LAPORAN --- */}
-      {activeTab === "buat" &&
-        (!ticketResult ? (
-          <form
-            className="login-form"
-            onSubmit={handleSubmit}
-            style={{ maxWidth: "100%" }}
-          >
-            <div className="form-group">
-              <label>Jenis Laporan</label>
-              <select
-                value={klasifikasi}
-                onChange={(e) => setKlasifikasi(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                }}
-              >
-                <option value="Pengaduan">Pengaduan (Keluhan)</option>
-                <option value="Aspirasi">Aspirasi (Saran/Masukan)</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Kategori</label>
-              <select
-                value={kategori}
-                onChange={(e) => setKategori(e.target.value)}
-                required
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                }}
-              >
-                <option value="">-- Pilih Kategori --</option>
-                <option value="Akademik">Akademik & Perkuliahan</option>
-                <option value="Sarana">Sarana & Prasarana</option>
-                <option value="Administrasi">Pelayanan Administrasi</option>
-                <option value="Etika">Etika & Disiplin</option>
-                <option value="Kemahasiswaan">Kemahasiswaan</option>
-                <option value="Lainnya">Lainnya</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Judul Laporan</label>
-              <input
-                type="text"
-                value={judul}
-                onChange={(e) => setJudul(e.target.value)}
-                required
-                placeholder="Contoh: AC di Ruang 201 Rusak"
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                }}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Isi Laporan (Detail)</label>
-              <textarea
-                value={isi}
-                onChange={(e) => setIsi(e.target.value)}
-                required
-                rows="5"
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                }}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Bukti Lampiran (Opsional - Foto/Dokumen)</label>
-              <input
-                type="file"
-                onChange={(e) => setFile(e.target.files[0])}
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                }}
-              />
-              <small style={{ color: "#999" }}>
-                Identitas Anda tidak akan disimpan.
-              </small>
-            </div>
-
-            <button type="submit" className="login-button" disabled={loading}>
-              {loading ? "Mengirim..." : "Kirim Laporan (Anonim)"}
-            </button>
-          </form>
-        ) : (
-          <div
-            style={{
-              textAlign: "center",
-              padding: "40px",
-              background: "#e6fffa",
-              borderRadius: "12px",
-              border: "2px solid #38b2ac",
-            }}
-          >
-            <FaCheckCircle size={50} color="#38b2ac" />
-            <h2 style={{ color: "#2c7a7b" }}>Laporan Terkirim!</h2>
-            <p>Mohon simpan Kode Tiket ini untuk melihat balasan admin:</p>
-
-            <div
-              style={{
-                background: "#fff",
-                padding: "15px",
-                fontSize: "2rem",
-                fontWeight: "bold",
-                letterSpacing: "2px",
-                margin: "20px 0",
-                border: "2px dashed #38b2ac",
-                color: "#333",
-              }}
-            >
-              {ticketResult}
-            </div>
-
-            <p style={{ color: "#d9534f", fontWeight: "bold" }}>
-              PENTING: Jangan sampai hilang! Kami tidak menyimpan data pribadi
-              Anda, jadi ini satu-satunya cara untuk melacak laporan.
-            </p>
-
+      {/* 2. MAIN CARD */}
+      <div className="siadudu-card-container">
+        <div className="siadudu-card">
+          <div className="siadudu-tabs">
             <button
+              className={`siadudu-tab ${activeTab === "buat" ? "active" : ""}`}
               onClick={() => {
+                setActiveTab("buat");
                 setTicketResult(null);
-                setActiveTab("cek");
-                setSearchTicket(ticketResult);
-              }}
-              style={{
-                marginTop: "20px",
-                padding: "10px 20px",
-                background: "#004a8d",
-                color: "#fff",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
               }}
             >
-              Cek Status Sekarang
+              <FaPaperPlane /> Buat Laporan
+            </button>
+            <button
+              className={`siadudu-tab ${activeTab === "cek" ? "active" : ""}`}
+              onClick={() => setActiveTab("cek")}
+            >
+              <FaSearch /> Cek Status
             </button>
           </div>
-        ))}
 
-      {/* --- TAB 2: CEK STATUS --- */}
-      {activeTab === "cek" && (
-        <div className="login-form" style={{ maxWidth: "100%" }}>
-          <form
-            onSubmit={handleTrack}
-            style={{ display: "flex", gap: "10px", marginBottom: "30px" }}
-          >
-            <input
-              type="text"
-              placeholder="Masukkan Kode Tiket (Misal: ADU-X1Y2)"
-              value={searchTicket}
-              onChange={(e) => setSearchTicket(e.target.value)}
-              required
-              style={{
-                flex: 1,
-                padding: "12px",
-                border: "2px solid #004a8d",
-                borderRadius: "4px",
-                fontSize: "1rem",
-                fontWeight: "bold",
-              }}
-            />
-            <button
-              type="submit"
-              style={{
-                background: "#004a8d",
-                color: "#fff",
-                border: "none",
-                padding: "0 20px",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
-            >
-              <FaSearch />
-            </button>
-          </form>
+          {/* FORM AREA */}
+          <div className="siadudu-form-area">
+            {activeTab === "buat" && !ticketResult && (
+              <form onSubmit={handleSubmit}>
+                <h3 className="form-section-title">Informasi Laporan</h3>
 
-          {trackError && (
-            <p style={{ color: "red", textAlign: "center" }}>{trackError}</p>
-          )}
-
-          {trackResult && (
-            <div
-              style={{
-                border: "1px solid #eee",
-                borderRadius: "8px",
-                overflow: "hidden",
-              }}
-            >
-              <div
-                style={{
-                  background: "#f9f9f9",
-                  padding: "15px",
-                  borderBottom: "1px solid #eee",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <span style={{ fontWeight: "bold", fontSize: "1.1rem" }}>
-                  #{trackResult.kode_tiket}
-                </span>
-                <span
+                <div
                   style={{
-                    background: getStatusColor(trackResult.status),
-                    color: "#fff",
-                    padding: "4px 10px",
-                    borderRadius: "20px",
-                    fontSize: "0.85rem",
-                    fontWeight: "bold",
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: "20px",
+                    marginBottom: "20px",
                   }}
                 >
-                  {trackResult.status}
-                </span>
-              </div>
+                  <div>
+                    <label className="input-label">Jenis Laporan</label>
+                    <select
+                      className="siadudu-input"
+                      value={klasifikasi}
+                      onChange={(e) => setKlasifikasi(e.target.value)}
+                    >
+                      <option value="Pengaduan">Pengaduan (Keluhan)</option>
+                      <option value="Aspirasi">Aspirasi (Saran)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="input-label">Kategori</label>
+                    <select
+                      className="siadudu-input"
+                      value={kategori}
+                      onChange={(e) => setKategori(e.target.value)}
+                      required
+                    >
+                      <option value="">-- Pilih Kategori --</option>
+                      <option value="Akademik">Akademik</option>
+                      <option value="Sarana">Sarana & Prasarana</option>
+                      <option value="Administrasi">Administrasi</option>
+                      <option value="Etika">Etika & Disiplin</option>
+                      <option value="Kemahasiswaan">Kemahasiswaan</option>
+                      <option value="Lainnya">Lainnya</option>
+                    </select>
+                  </div>
+                </div>
 
-              <div style={{ padding: "20px" }}>
-                <h3 style={{ marginTop: 0 }}>{trackResult.judul}</h3>
-                <p
-                  style={{
-                    color: "#666",
-                    fontSize: "0.9rem",
-                    marginBottom: "5px",
-                  }}
-                >
-                  {trackResult.klasifikasi} - {trackResult.kategori}
+                <div style={{ marginBottom: "20px" }}>
+                  <label className="input-label">Judul Laporan</label>
+                  <input
+                    type="text"
+                    className="siadudu-input"
+                    placeholder="Contoh: Proyektor di Ruang 301 Rusak"
+                    value={judul}
+                    onChange={(e) => setJudul(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div style={{ marginBottom: "20px" }}>
+                  <label className="input-label">Detail Laporan</label>
+                  <textarea
+                    className="siadudu-input"
+                    rows="5"
+                    placeholder="Jelaskan kronologi atau detail masalah secara lengkap..."
+                    value={isi}
+                    onChange={(e) => setIsi(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div style={{ marginBottom: "20px" }}>
+                  <label className="input-label">
+                    Bukti Lampiran (Opsional)
+                  </label>
+                  <div className="file-input-wrapper">
+                    <input
+                      type="file"
+                      id="file-upload"
+                      onChange={(e) => setFile(e.target.files[0])}
+                      style={{ display: "none" }}
+                    />
+                    <label
+                      htmlFor="file-upload"
+                      style={{ cursor: "pointer", width: "100%" }}
+                    >
+                      <FaFileUpload size={24} color="#004a8d" />
+                      <p
+                        style={{
+                          margin: "5px 0 0",
+                          fontSize: "0.9rem",
+                          color: "#666",
+                        }}
+                      >
+                        {file ? file.name : "Klik untuk upload foto/dokumen"}
+                      </p>
+                    </label>
+                  </div>
+                </div>
+
+                <button type="submit" className="btn-submit" disabled={loading}>
+                  {loading ? "Sedang Mengirim..." : "Kirim Laporan"}
+                </button>
+              </form>
+            )}
+
+            {/* --- STATE 2: SUKSES TIKET --- */}
+            {activeTab === "buat" && ticketResult && (
+              <div className="ticket-success-card">
+                <FaCheckCircle
+                  size={60}
+                  color="#28a745"
+                  style={{ marginBottom: "20px" }}
+                />
+                <h2 style={{ color: "#333", marginBottom: "10px" }}>
+                  Laporan Berhasil Dikirim!
+                </h2>
+                <p style={{ color: "#666" }}>
+                  Laporan Anda telah kami terima secara anonim.
                 </p>
-                <p
+
+                <div className="ticket-box">{ticketResult}</div>
+
+                <div
                   style={{
-                    background: "#f5f5f5",
+                    background: "#fff3cd",
+                    color: "#856404",
                     padding: "15px",
-                    borderRadius: "5px",
-                    whiteSpace: "pre-wrap",
+                    borderRadius: "8px",
+                    fontSize: "0.9rem",
                   }}
                 >
-                  {trackResult.isi}
-                </p>
+                  <strong>PENTING:</strong> Simpan kode tiket di atas! Ini
+                  adalah satu-satunya kunci untuk melihat tanggapan admin
+                  terhadap laporan Anda.
+                </div>
 
-                {trackResult.file_path && (
-                  <a
-                    href={`${
-                      import.meta.env.VITE_API_URL
-                    }../uploads/documents/${trackResult.file_path}`}
-                    target="_blank"
-                    rel="noreferrer"
+                <button
+                  className="btn-submit"
+                  onClick={() => {
+                    setTicketResult(null);
+                    setActiveTab("cek");
+                    setSearchTicket(ticketResult);
+                  }}
+                >
+                  Cek Status Sekarang
+                </button>
+              </div>
+            )}
+
+            {/* --- STATE 3: CEK STATUS --- */}
+            {activeTab === "cek" && (
+              <div>
+                <form
+                  onSubmit={handleTrack}
+                  style={{ display: "flex", gap: "10px", marginBottom: "30px" }}
+                >
+                  <input
+                    type="text"
+                    className="siadudu-input"
+                    placeholder="Masukkan Kode Tiket (Misal: ADU-X1Y2)"
+                    value={searchTicket}
+                    onChange={(e) => setSearchTicket(e.target.value)}
+                    required
+                    style={{ fontWeight: "bold", letterSpacing: "1px" }}
+                  />
+                  <button
+                    type="submit"
+                    className="btn-submit"
+                    style={{ width: "auto", padding: "0 30px", marginTop: 0 }}
+                  >
+                    <FaSearch />
+                  </button>
+                </form>
+
+                {trackError && (
+                  <div
                     style={{
-                      color: "#004a8d",
-                      display: "inline-block",
-                      marginTop: "10px",
+                      textAlign: "center",
+                      padding: "30px",
+                      color: "#dc3545",
+                      background: "#fff5f5",
+                      borderRadius: "8px",
                     }}
                   >
-                    Lihat Lampiran
-                  </a>
+                    <FaExclamationCircle
+                      size={30}
+                      style={{ marginBottom: "10px" }}
+                    />
+                    <p>{trackError}</p>
+                  </div>
                 )}
-              </div>
 
-              {/* BALASAN ADMIN */}
-              <div
-                style={{
-                  background: "#eef4fa",
-                  padding: "20px",
-                  borderTop: "1px solid #dae1e7",
-                }}
-              >
-                <h4 style={{ marginTop: 0, color: "#004a8d" }}>
-                  <FaExclamationCircle /> Tanggapan Admin
-                </h4>
-                {trackResult.tanggapan_admin ? (
-                  <p style={{ whiteSpace: "pre-wrap" }}>
-                    {trackResult.tanggapan_admin}
-                  </p>
-                ) : (
-                  <p style={{ color: "#888", fontStyle: "italic" }}>
-                    Belum ada tanggapan dari admin.
-                  </p>
+                {trackResult && (
+                  <div className="track-result-card">
+                    <div className="track-header">
+                      <div>
+                        <span
+                          style={{
+                            display: "block",
+                            fontSize: "0.8rem",
+                            color: "#888",
+                          }}
+                        >
+                          Kode Tiket
+                        </span>
+                        <strong style={{ fontSize: "1.2rem", color: "#333" }}>
+                          {trackResult.kode_tiket}
+                        </strong>
+                      </div>
+                      <span
+                        className="status-badge"
+                        style={{
+                          background: getStatusColor(trackResult.status),
+                        }}
+                      >
+                        {trackResult.status}
+                      </span>
+                    </div>
+
+                    <div className="track-body">
+                      <h3 style={{ fontSize: "1.3rem", marginBottom: "10px" }}>
+                        {trackResult.judul}
+                      </h3>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "15px",
+                          fontSize: "0.85rem",
+                          color: "#666",
+                          marginBottom: "20px",
+                        }}
+                      >
+                        <span>
+                          📅{" "}
+                          {new Date(
+                            trackResult.tanggal_buat
+                          ).toLocaleDateString()}
+                        </span>
+                        <span>📂 {trackResult.kategori}</span>
+                      </div>
+
+                      <p
+                        style={{
+                          lineHeight: "1.6",
+                          color: "#444",
+                          background: "#f9f9f9",
+                          padding: "15px",
+                          borderRadius: "8px",
+                        }}
+                      >
+                        {trackResult.isi}
+                      </p>
+
+                      {trackResult.file_path && (
+                        <a
+                          href={`${
+                            import.meta.env.VITE_API_URL
+                          }../uploads/documents/${trackResult.file_path}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{
+                            display: "inline-block",
+                            marginTop: "10px",
+                            color: "#004a8d",
+                            fontWeight: "600",
+                          }}
+                        >
+                          📎 Lihat Lampiran
+                        </a>
+                      )}
+
+                      <div className="track-reply">
+                        <h4
+                          style={{
+                            margin: "0 0 10px 0",
+                            color: "#004a8d",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                          }}
+                        >
+                          <FaExclamationCircle /> Tanggapan Admin
+                        </h4>
+                        {trackResult.tanggapan_admin ? (
+                          <p style={{ margin: 0, whiteSpace: "pre-wrap" }}>
+                            {trackResult.tanggapan_admin}
+                          </p>
+                        ) : (
+                          <p
+                            style={{
+                              margin: 0,
+                              color: "#888",
+                              fontStyle: "italic",
+                            }}
+                          >
+                            Belum ada tanggapan. Mohon menunggu.
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 )}
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
