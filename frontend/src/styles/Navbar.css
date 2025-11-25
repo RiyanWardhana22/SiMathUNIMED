@@ -39,13 +39,10 @@
 }
 
 .navbar-menu {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  grid-auto-flow: column;
+  display: flex;
   gap: 10px;
   list-style: none;
   text-align: center;
-  justify-content: end;
   margin: 0;
   padding: 0;
 }
@@ -54,6 +51,7 @@
   display: flex;
   align-items: center;
   height: 80px;
+  position: relative;
 }
 
 .navbar-link {
@@ -66,6 +64,7 @@
   transition: all 0.3s ease;
   font-weight: 500;
   border-bottom: 4px solid transparent;
+  cursor: pointer;
 }
 
 .navbar-link:hover {
@@ -73,6 +72,49 @@
   color: #f0f0f0;
 }
 
+.caret-icon {
+  margin-left: 5px;
+  font-size: 0.8rem;
+}
+
+/* --- DROPDOWN MENU (DESKTOP) --- */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 80px;
+  left: 0;
+  width: 220px;
+  background: #003366;
+  list-style: none;
+  text-align: start;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 0;
+}
+
+.navbar-item:hover .dropdown-menu,
+.dropdown-menu.active {
+  display: block;
+}
+
+.dropdown-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: #fff;
+  padding: 16px;
+  font-size: 1rem;
+  transition: background 0.3s;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-link:hover {
+  background-color: #004a8d;
+  color: #f0ad4e;
+}
+
+/* Tombol Logout */
 .navbar-link-button {
   background: none;
   border: none;
@@ -100,6 +142,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: 100vh;
     position: fixed;
     top: 80px;
     left: -100%;
@@ -119,8 +162,7 @@
   .navbar-item {
     height: auto;
     width: 100%;
-    display: flex;
-    justify-content: center;
+    display: block;
   }
 
   .navbar-link,
@@ -128,7 +170,8 @@
     text-align: center;
     padding: 1.5rem;
     width: 100%;
-    display: table;
+    display: flex;
+    justify-content: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
@@ -155,5 +198,32 @@
   .navbar-logo {
     font-size: 1.5rem;
     z-index: 1000;
+  }
+
+  .dropdown-menu {
+    position: relative;
+    top: 0;
+    width: 100%;
+    display: none;
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: none;
+  }
+
+  .dropdown-menu.active {
+    display: block;
+  }
+
+  .dropdown-link {
+    text-align: center;
+    padding: 1.2rem;
+    border-bottom: none;
+  }
+
+  .navbar-item:hover .dropdown-menu {
+    display: none;
+  }
+
+  .navbar-item .dropdown-menu.active {
+    display: block;
   }
 }
