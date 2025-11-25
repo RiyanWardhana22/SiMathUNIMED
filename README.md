@@ -54,3 +54,16 @@ SiMathUNIMED/
 │   ├── src/         # Source code komponen & halaman
 │   └── public/      # Aset statis
 └── README.md        # Dokumentasi ini
+```
+
+## 🚀 Panduan Instalasi & Menjalankan
+1. Persiapan Database
+* Buat database baru di MySQL (misal: simath_db).
+
+* Import file database (SQL) yang disertakan ke dalam database tersebut.
+
+* Konfigurasi koneksi database:
+
+* Buka file backend/db_config.php.
+
+* Sesuaikan $host, $username, $password, dan $db_name.
