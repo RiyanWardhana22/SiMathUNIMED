@@ -28,6 +28,15 @@ function SiAduDu() {
     e.preventDefault();
     setLoading(true);
 
+    if (isi.trim().length < 50) {
+      Swal.fire({
+        title: "Mohon jelaskan kronologi minimal 50 karakter.",
+        icon: "error",
+      });
+      setLoading(false);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("klasifikasi", klasifikasi);
     formData.append("kategori", kategori);

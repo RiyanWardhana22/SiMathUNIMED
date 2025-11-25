@@ -14,12 +14,20 @@ function generateTicket($length = 6)
 }
 
 if (isset($_POST['judul']) && isset($_POST['isi']) && isset($_POST['klasifikasi'])) {
+            $isi_laporan = trim($_POST['isi']);
+            if (strlen($isi_laporan) < 50) {
+                        http_response_code(400);
+                        $response['status'] = 'error';
+                        $response['message'] = 'Isi laporan terlalu pendek. Mohon jelaskan detail masalah minimal 30 karakter agar kami bisa memahaminya.';
+                        echo json_encode($response);
+                        die();
+            }
 
             $kode_tiket = generateTicket();
             $klasifikasi = $_POST['klasifikasi'];
             $kategori = $_POST['kategori'];
             $judul = $_POST['judul'];
-            $isi = $_POST['isi'];
+            $isi = $isi_laporan;
             $file_path = NULL;
 
             if (isset($_FILES['lampiran']) && $_FILES['lampiran']['error'] == UPLOAD_ERR_OK) {
