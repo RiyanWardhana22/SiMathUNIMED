@@ -28,6 +28,8 @@ import ResetPassword from "./pages/ResetPassword";
 import AdminKelolaUsers from "./pages/admin/AdminKelolaUsers";
 import AdminTambahUser from "./pages/admin/AdminTambahUser";
 import AdminEditUser from "./pages/admin/AdminEditUser";
+import SiAduDu from "./pages/SiAduDu";
+import AdminPengaduan from "./pages/admin/AdminPengaduan";
 
 function App() {
   return (
@@ -46,6 +48,7 @@ function App() {
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="reset-password" element={<ResetPassword />} />
           <Route path="akademik" element={<Akademik />} />
+          <Route path="siadudu" element={<SiAduDu />} />
         </Route>
 
         {/* ROLE SUPERADMIN */}
@@ -68,6 +71,7 @@ function App() {
             <Route path="/admin/prodi" element={<AdminKelolaProdi />} />
             <Route path="/admin/prodi/edit/:id" element={<AdminEditProdi />} />
             <Route path="/admin/slider" element={<AdminKelolaSlider />} />
+            <Route path="/admin/pengaduan" element={<AdminPengaduan />} />
             <Route path="/admin/pengaturan" element={<AdminPengaturan />} />
             <Route path="/admin/users" element={<AdminKelolaUsers />} />
             <Route path="/admin/users/tambah" element={<AdminTambahUser />} />

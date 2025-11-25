@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import api from "../api";
 import { Link } from "react-router-dom";
 import "../styles/Home.css";
-import "../styles/Berita.css"; // Gunakan style kartu berita yang sudah bagus
+import "../styles/Berita.css";
 import HomeSlider from "../components/HomeSlider";
 import {
   FaUniversity,
   FaLaptopCode,
   FaChartBar,
   FaCalculator,
-} from "react-icons/fa"; // Ikon Prodi
+} from "react-icons/fa";
 
 function Home() {
   const [prodi, setProdi] = useState([]);
@@ -20,14 +20,13 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fungsi helper untuk memilih ikon prodi
   const getProdiIcon = (nama) => {
     const n = nama.toLowerCase();
     if (n.includes("komputer") || n.includes("informatika"))
       return <FaLaptopCode />;
     if (n.includes("statistika")) return <FaChartBar />;
     if (n.includes("pendidikan")) return <FaUniversity />;
-    return <FaCalculator />; // Default Matematika
+    return <FaCalculator />;
   };
 
   const formatDate = (dateString) => {
@@ -51,7 +50,7 @@ function Home() {
         if (settingsRes.data.status === "success")
           setSettings(settingsRes.data.data);
         if (beritaRes.data.status === "success")
-          setBerita(beritaRes.data.data.slice(0, 3)); // Ambil 3 berita terbaru
+          setBerita(beritaRes.data.data.slice(0, 3));
         if (statsRes.data.status === "success") setStats(statsRes.data.data);
         if (sliderRes.data.status === "success")
           setSliders(sliderRes.data.data);
@@ -100,7 +99,6 @@ function Home() {
 
   return (
     <div className="home-page">
-      {/* 1. SLIDER SECTION (Full Width) */}
       {sliders.length > 0 && <HomeSlider slides={sliders} />}
 
       {/* 2. SAMBUTAN SECTION */}
@@ -110,7 +108,6 @@ function Home() {
             <div className="section-title">
               <h2>Sambutan Ketua Jurusan</h2>
             </div>
-            {/* Gunakan div biasa untuk konten HTML */}
             <div
               className="sambutan-content"
               dangerouslySetInnerHTML={{
@@ -163,11 +160,10 @@ function Home() {
                     {getProdiIcon(item.nama_prodi)}
                   </div>
                   <h3>{item.nama_prodi}</h3>
-                  {/* Hapus tag HTML dari deskripsi singkat agar rapi di card */}
                   <p>
                     {item.deskripsi
                       ? item.deskripsi
-                          .replace(/<[^>]+>/g, "") // Regex hapus HTML
+                          .replace(/<[^>]+>/g, "")
                           .substring(0, 100) + "..."
                       : "Info detail..."}
                   </p>
@@ -208,7 +204,6 @@ function Home() {
                     }`}
                     alt={item.judul}
                     className="berita-card-image"
-                    // Fallback image jika broken
                     onError={(e) => {
                       e.target.src = `${
                         import.meta.env.VITE_API_URL

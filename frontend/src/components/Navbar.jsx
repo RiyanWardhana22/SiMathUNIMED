@@ -66,6 +66,15 @@ function Navbar() {
               Berita
             </Link>
           </li>
+          <li className="navbar-item">
+            <Link
+              to="/siadudu"
+              className="navbar-link"
+              onClick={closeMobileMenu}
+            >
+              Layanan Pengaduan
+            </Link>
+          </li>
 
           {/* AUTH LINKS */}
           {authUser ? (

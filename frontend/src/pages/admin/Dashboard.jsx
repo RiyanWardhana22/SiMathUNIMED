@@ -6,7 +6,7 @@ import "../../styles/Dashboard.css";
 import "../../styles/AdminTable.css";
 import { MdDashboard } from "react-icons/md";
 import { IoFileTrayStackedSharp } from "react-icons/io5";
-import { FaUserCog } from "react-icons/fa";
+import { FaUserCog, FaBullhorn } from "react-icons/fa";
 
 import {
   FaNewspaper,
@@ -143,6 +143,12 @@ function Dashboard() {
             <FaFileAlt />
           </div>
           <span className="action-title">Kelola Dokumen</span>
+        </Link>
+        <Link to="/admin/pengaduan" className="action-card">
+          <div className="action-icon">
+            <FaBullhorn />
+          </div>
+          <span className="action-title">Kelola Pengaduan</span>
         </Link>
         <Link to="/admin/slider" className="action-card">
           <div className="action-icon">
